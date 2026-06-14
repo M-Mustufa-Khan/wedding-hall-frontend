@@ -13,25 +13,48 @@
 }
 .subtitle {
   color: #888;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
-.no-bookings {
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 12px;
+}
+.tab {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+  font-family: inherit;
+  transition: 0.3s;
+}
+.tab.active {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #fff;
+}
+.empty-state {
   text-align: center;
   padding: 80px 20px;
   background: #111;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
 }
-.no-bookings h2 {
+.empty-state h2 {
   color: #fff;
-  margin-bottom: 8px;
+  margin: 16px 0 8px;
 }
-.no-bookings p {
+.empty-state p {
   color: #888;
   margin-bottom: 20px;
 }
-.bookings-grid {
-  display: grid;
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 .booking-card {
@@ -39,37 +62,173 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 20px;
-}
-.booking-header {
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
   align-items: center;
-  margin-bottom: 12px;
 }
-.booking-header h3 {
+.booking-img {
+  width: 100px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.booking-info {
+  flex: 1;
+}
+.booking-info h3 {
   color: #fff;
-  font-size: 1.1rem;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+.booking-info p {
+  color: #aaa;
+  font-size: 0.8rem;
+  margin-bottom: 2px;
+}
+.booking-financials {
+  text-align: right;
 }
 .status-badge {
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
-}
-.status-badge.confirmed {
-  background: rgba(46, 213, 115, 0.15);
-  color: #2ed573;
+  display: inline-block;
+  margin-bottom: 8px;
 }
 .status-badge.pending {
   background: rgba(255, 165, 0, 0.15);
   color: #ffa500;
 }
+.status-badge.confirmed {
+  background: rgba(46, 213, 115, 0.15);
+  color: #2ed573;
+}
 .status-badge.cancelled {
   background: rgba(255, 50, 50, 0.15);
   color: #ff6b6b;
 }
-.booking-details p {
+.total-amt {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.advance-amt {
+  color: #2ed573;
+  font-size: 0.85rem;
+}
+.booking-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.icon-btn {
+  background: transparent;
+  border: 1px solid #333;
   color: #aaa;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: 0.3s;
+}
+.icon-btn:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+.icon-btn.cancel:hover {
+  border-color: #e53935;
+  color: #e53935;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.modal-content {
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-content h2 {
+  color: #fff;
+  margin-bottom: 24px;
+}
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  color: #ccc;
   font-size: 0.9rem;
-  margin-bottom: 4px;
+  margin-bottom: 24px;
+}
+.modal-timeline h3 {
+  color: #fff;
+  margin-bottom: 16px;
+}
+.timeline-item {
+  padding: 8px 0;
+  color: #555;
+  border-left: 2px solid #333;
+  padding-left: 20px;
+  margin-left: 10px;
+  position: relative;
+}
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #333;
+}
+.timeline-item.done {
+  color: #2ed573;
+  border-left-color: #2ed573;
+}
+.timeline-item.done::before {
+  background: #2ed573;
+}
+.timeline-item.active {
+  color: #ffa500;
+  border-left-color: #ffa500;
+}
+.timeline-item.active::before {
+  background: #ffa500;
+}
+
+@media (max-width: 768px) {
+  .booking-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .booking-financials {
+    text-align: center;
+  }
 }

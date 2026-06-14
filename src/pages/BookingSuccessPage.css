@@ -1,73 +1,313 @@
+/* ============================================
+   BOOKING SUCCESS PAGE — Complete Stylesheet
+   Wedding Hall Management System
+   Gold theme consistent with rest of app
+   ============================================ */
+
+/* ── Page Shell ── */
 .success-page {
-  padding-top: 100px;
+  padding-top: 70px;
   min-height: 100vh;
   background: #0a0a0a;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #e8e8e8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
+
 .success-container {
-  max-width: 600px;
+  max-width: 620px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
-  padding: 40px 24px;
+  padding: 60px 24px 80px;
 }
+
+/* ============================================
+   CHECKMARK ANIMATION
+   ============================================ */
 .success-animation {
   color: #2ed573;
   margin-bottom: 24px;
-  animation: pop 0.5s ease;
+  display: flex;
+  justify-content: center;
+  animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
+
 @keyframes pop {
   0% {
     transform: scale(0);
+    opacity: 0;
   }
-  50% {
+  60% {
     transform: scale(1.2);
+    opacity: 1;
   }
   100% {
     transform: scale(1);
   }
 }
-.booking-id-box {
-  background: #111;
-  border: 1px solid #ff6b6b;
-  padding: 12px;
-  border-radius: 8px;
-  display: inline-block;
-  margin: 16px 0 32px;
-  color: #ff6b6b;
-  font-weight: 700;
-  letter-spacing: 1px;
+
+/* Glow ring behind checkmark */
+.success-animation svg {
+  filter: drop-shadow(0 0 24px rgba(46, 213, 115, 0.45));
 }
+
+/* ── Heading ── */
+.success-container h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f5f5f5;
+  margin: 0 0 8px;
+  letter-spacing: -0.03em;
+}
+
+.success-container > p {
+  color: #777;
+  font-size: 0.95rem;
+  margin: 0 0 24px;
+}
+
+/* ============================================
+   BOOKING ID BOX
+   ============================================ */
+.booking-id-box {
+  background: rgba(201, 168, 76, 0.08);
+  border: 1.5px solid rgba(201, 168, 76, 0.4);
+  padding: 12px 28px;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 0 0 36px;
+  color: #c9a84c;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   SUCCESS SUMMARY CARD
+   ============================================ */
 .success-summary {
   background: #111;
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 32px;
+  border: 1px solid #1e1e1e;
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
   text-align: left;
+  position: relative;
+  overflow: hidden;
 }
-.success-summary p {
-  color: #ccc;
-  margin-bottom: 8px;
+
+/* Gold top accent line */
+.success-summary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #c9a84c, #e8c97a, #c9a84c);
 }
+
+.success-summary h3 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 16px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid #1a1a1a;
+  font-size: 0.88rem;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row span:first-child {
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-row span:last-child {
+  color: #e0e0e0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.summary-row.highlight span:last-child {
+  color: #c9a84c;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.summary-row.green span:last-child {
+  color: #2ed573;
+  font-weight: 700;
+}
+
+.summary-row.orange span:last-child {
+  color: #ff9f43;
+  font-weight: 700;
+}
+
+/* ============================================
+   NEXT STEPS CARD
+   ============================================ */
 .next-steps {
-  text-align: left;
   background: #111;
-  padding: 24px;
-  border-radius: 12px;
+  border: 1px solid #1e1e1e;
+  border-radius: 16px;
+  padding: 24px 28px;
   margin-bottom: 32px;
+  text-align: left;
 }
+
 .next-steps h3 {
-  color: #fff;
-  margin-bottom: 16px;
+  color: #f0f0f0;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 20px;
 }
+
+/* Custom styled steps list */
 .next-steps ol {
-  padding-left: 20px;
-  color: #aaa;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+
 .next-steps li {
-  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  color: #999;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
+
+/* Number badge per step */
+.next-steps li::before {
+  content: counter(step);
+  counter-increment: step;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: #c9a84c;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.next-steps ol {
+  counter-reset: step;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
 .success-actions {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.success-actions .btn-primary {
+  background: linear-gradient(135deg, #c9a84c, #e8c97a);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 28px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    opacity 0.2s,
+    transform 0.15s,
+    box-shadow 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.success-actions .btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(201, 168, 76, 0.35);
+}
+
+.success-actions .btn-secondary {
+  background: transparent;
+  color: #888;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.success-actions .btn-secondary:hover {
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 600px) {
+  .success-container {
+    padding: 40px 16px 60px;
+  }
+
+  .success-container h1 {
+    font-size: 1.6rem;
+  }
+
+  .success-summary,
+  .next-steps {
+    padding: 20px 18px;
+  }
+
+  .success-actions {
+    flex-direction: column;
+  }
+
+  .success-actions .btn-primary,
+  .success-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
 }

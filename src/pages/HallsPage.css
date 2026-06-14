@@ -1,33 +1,474 @@
-.halls-page { padding-top: 70px; background: #0a0a0a; }
-.halls-hero { text-align: center; padding: 80px 24px 40px; background: linear-gradient(180deg, #1a0a0a 0%, #0a0a0a 100%); }
-.halls-hero h1 { font-size: 2.5rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-.breadcrumb { color: #888; font-size: 0.9rem; }
+/* ============================================
+   HALLS PAGE — Complete Stylesheet
+   Wedding Hall Management System
+   Gold theme consistent with BookingPage
+   ============================================ */
 
-.halls-layout { max-width: 1200px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+/* ── Page Shell ── */
+.halls-page {
+  padding-top: 100px;
+  background: #0a0a0a;
+  min-height: 100vh;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #e8e8e8;
+}
 
-/* SIDEBAR */
-.filter-sidebar { background: #111; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; height: fit-content; position: sticky; top: 90px; }
-.filter-sidebar h3 { display: flex; align-items: center; gap: 8px; color: #fff; margin-bottom: 24px; font-size: 1.1rem; }
-.filter-group { margin-bottom: 20px; }
-.filter-group label { display: block; color: #aaa; font-size: 0.85rem; margin-bottom: 8px; }
-.filter-group select { width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; outline: none; }
+/* ============================================
+   HERO BANNER
+   ============================================ */
+.halls-hero {
+  text-align: center;
+  padding: 72px 24px 48px;
+  background: linear-gradient(180deg, #130f00 0%, #0a0a0a 100%);
+  position: relative;
+  overflow: hidden;
+}
+.halls-hero h2 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
 
-/* MAIN */
-.halls-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-.results-count { color: #888; font-size: 0.9rem; }
-.view-toggle { display: flex; gap: 8px; }
-.view-toggle button { background: #111; border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-.view-toggle button.active { background: #ff6b6b; border-color: #ff6b6b; color: #fff; }
+/* Subtle gold glow behind heading */
+.halls-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 200px;
+  background: radial-gradient(
+    ellipse,
+    rgba(201, 168, 76, 0.12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
 
-.halls-grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-.halls-list-view { display: flex; flex-direction: column; gap: 16px; }
+.halls-hero h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #f5f5f5;
+  margin: 0 0 12px;
+  letter-spacing: -0.03em;
+  position: relative;
+}
 
-/* PAGINATION */
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 48px; }
-.page-btn { background: #111; border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-.page-btn.active, .page-btn:hover { background: #ff6b6b; border-color: #ff6b6b; }
+.breadcrumb {
+  color: #555;
+  font-size: 0.88rem;
+  letter-spacing: 0.03em;
+  position: relative;
+}
 
+.breadcrumb span {
+  color: #c9a84c;
+}
+
+/* ============================================
+   LAYOUT — Sidebar + Main
+   ============================================ */
+.halls-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ============================================
+   FILTER SIDEBAR
+   ============================================ */
+.filter-sidebar {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 16px;
+  padding: 24px;
+  height: fit-content;
+  position: sticky;
+  top: 90px;
+}
+
+.filter-sidebar h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f0f0f0;
+  margin: 0 0 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.filter-sidebar h3 svg {
+  color: #c9a84c;
+}
+
+/* Form groups inside sidebar */
+.filter-sidebar .form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-sidebar .form-group label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.filter-sidebar .form-group input,
+.filter-sidebar .form-group select {
+  background: #ffffff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.filter-sidebar .form-group input::placeholder {
+  color: #9e9e9e;
+}
+
+.filter-sidebar .form-group input:focus,
+.filter-sidebar .form-group select:focus {
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15);
+}
+
+/* Select arrow */
+.filter-sidebar .form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23555' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-color: #ffffff;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+/* Sidebar buttons */
+.filter-sidebar .btn-primary {
+  width: 100%;
+  margin-top: 8px;
+  justify-content: center;
+  background: linear-gradient(135deg, #c9a84c, #e8c97a);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition:
+    opacity 0.2s,
+    box-shadow 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.filter-sidebar .btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
+}
+
+.filter-sidebar .btn-secondary {
+  width: 100%;
+  margin-top: 8px;
+  justify-content: center;
+  background: transparent;
+  color: #777;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.filter-sidebar .btn-secondary:hover {
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+.halls-main {
+  min-width: 0; /* prevent grid blowout */
+}
+
+/* Controls row — results count + view toggle */
+.halls-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.results-count {
+  color: #666;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* Active filter pill */
+.active-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  color: #c9a84c;
+  border-radius: 20px;
+  padding: 4px 10px 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.clear-btn {
+  background: rgba(201, 168, 76, 0.2);
+  border: none;
+  color: #c9a84c;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  background: rgba(201, 168, 76, 0.4);
+}
+
+/* View toggle buttons */
+.view-toggle {
+  display: flex;
+  gap: 6px;
+}
+
+.view-toggle button {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  color: #555;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.view-toggle button:hover {
+  border-color: #333;
+  color: #aaa;
+}
+
+.view-toggle button.active {
+  background: rgba(201, 168, 76, 0.12);
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+/* ============================================
+   HALLS GRID & LIST VIEW
+   ============================================ */
+.halls-grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.halls-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: 8px;
+  opacity: 0.4;
+}
+
+.empty-state h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.empty-state p {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0;
+  max-width: 320px;
+}
+
+.empty-state .btn-primary {
+  margin-top: 8px;
+  background: linear-gradient(135deg, #c9a84c, #e8c97a);
+  color: #0d0d0d;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    box-shadow 0.2s;
+}
+
+.empty-state .btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 56px;
+}
+
+.page-btn {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  color: #777;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.page-btn:hover {
+  border-color: #c9a84c;
+  color: #c9a84c;
+}
+
+.page-btn.active {
+  background: linear-gradient(135deg, #c9a84c, #e8c97a);
+  border-color: transparent;
+  color: #0d0d0d;
+  font-weight: 700;
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-btn:disabled:hover {
+  border-color: #1e1e1e;
+  color: #777;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 900px) {
-  .halls-layout { grid-template-columns: 1fr; }
-  .filter-sidebar { position: static; }
+  .halls-layout {
+    grid-template-columns: 1fr;
+    padding: 24px 16px 60px;
+  }
+
+  .filter-sidebar {
+    position: static;
+  }
+
+  .halls-hero h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .halls-hero {
+    padding: 56px 16px 36px;
+  }
+
+  .halls-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .halls-grid-view {
+    grid-template-columns: 1fr;
+  }
+
+  .halls-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

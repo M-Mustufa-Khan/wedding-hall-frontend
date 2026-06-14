@@ -1,0 +1,240 @@
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("https://images.unsplash.com/photo-1519741497674-611481863552?w=1600")
+    center/cover no-repeat;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+}
+.hero-content {
+  position: relative;
+  text-align: center;
+  padding: 0 24px;
+  max-width: 800px;
+}
+.hero-content h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.highlight {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-content p {
+  font-size: 1.2rem;
+  color: #ddd;
+  margin-bottom: 32px;
+}
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.scroll-arrow {
+  margin-top: 60px;
+  color: #fff;
+}
+.bounce {
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+/* SEARCH BAR */
+.search-section {
+  margin-top: -40px;
+  position: relative;
+  z-index: 10;
+  padding: 0 24px;
+}
+.search-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+.search-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.search-item label {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.search-item input,
+.search-item select {
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  color: #333;
+  font-family: inherit;
+  outline: none;
+}
+.search-item input:focus,
+.search-item select:focus {
+  border-color: #ff6b6b;
+}
+.search-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  height: fit-content;
+}
+
+/* SECTIONS */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.section-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.section-subtitle {
+  text-align: center;
+  color: #888;
+  margin-bottom: 48px;
+}
+
+/* HALLS */
+.halls-section {
+  padding: 100px 0 80px;
+}
+.halls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.view-all-btn {
+  text-align: center;
+  margin-top: 48px;
+}
+
+/* WHY US */
+.why-section {
+  padding: 80px 0;
+  background: #0f0f0f;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+.why-card {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.why-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+.why-icon {
+  color: #ff6b6b;
+  margin-bottom: 16px;
+}
+.why-card h3 {
+  color: #fff;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+.why-card p {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* TESTIMONIALS */
+.testimonials-section {
+  padding: 80px 0;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+.test-card {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 28px;
+}
+.stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.test-card p {
+  color: #ccc;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.test-author {
+  color: #ff6b6b;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+  .search-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

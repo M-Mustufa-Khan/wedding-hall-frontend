@@ -1,0 +1,33 @@
+.halls-page { padding-top: 70px; background: #0a0a0a; }
+.halls-hero { text-align: center; padding: 80px 24px 40px; background: linear-gradient(180deg, #1a0a0a 0%, #0a0a0a 100%); }
+.halls-hero h1 { font-size: 2.5rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.breadcrumb { color: #888; font-size: 0.9rem; }
+
+.halls-layout { max-width: 1200px; margin: 0 auto; padding: 40px 24px; display: grid; grid-template-columns: 280px 1fr; gap: 32px; }
+
+/* SIDEBAR */
+.filter-sidebar { background: #111; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; height: fit-content; position: sticky; top: 90px; }
+.filter-sidebar h3 { display: flex; align-items: center; gap: 8px; color: #fff; margin-bottom: 24px; font-size: 1.1rem; }
+.filter-group { margin-bottom: 20px; }
+.filter-group label { display: block; color: #aaa; font-size: 0.85rem; margin-bottom: 8px; }
+.filter-group select { width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; outline: none; }
+
+/* MAIN */
+.halls-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.results-count { color: #888; font-size: 0.9rem; }
+.view-toggle { display: flex; gap: 8px; }
+.view-toggle button { background: #111; border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+.view-toggle button.active { background: #ff6b6b; border-color: #ff6b6b; color: #fff; }
+
+.halls-grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+.halls-list-view { display: flex; flex-direction: column; gap: 16px; }
+
+/* PAGINATION */
+.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 48px; }
+.page-btn { background: #111; border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+.page-btn.active, .page-btn:hover { background: #ff6b6b; border-color: #ff6b6b; }
+
+@media (max-width: 900px) {
+  .halls-layout { grid-template-columns: 1fr; }
+  .filter-sidebar { position: static; }
+}

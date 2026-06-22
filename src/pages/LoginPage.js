@@ -16,10 +16,16 @@ const LoginPage = () => {
       const res = await login(form);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/");
+
+      // ✅ REDIRECT BASED ON ROLE
+      if (res.data.user.role === "Admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
       window.location.reload();
     } catch (err) {
-      // Fallback for demo
+      // Fallback for demo (when backend is offline)
       if (
         form.email === "admin@weddinghall.com" &&
         form.password === "admin123"
@@ -33,7 +39,7 @@ const LoginPage = () => {
             role: "Admin",
           }),
         );
-        navigate("/");
+        navigate("/admin"); // ✅ GOES STRAIGHT TO ADMIN PANEL
         window.location.reload();
       } else if (form.email && form.password) {
         localStorage.setItem(
@@ -45,7 +51,7 @@ const LoginPage = () => {
             role: "Customer",
           }),
         );
-        navigate("/");
+        navigate("/"); // ✅ GOES TO HOME
         window.location.reload();
       } else {
         setError("Invalid email or password.");

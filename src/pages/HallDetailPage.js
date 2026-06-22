@@ -9,6 +9,7 @@ import {
   Music,
   Camera,
   Droplets,
+  Heart,
 } from "lucide-react";
 import { getHallById } from "../services/api";
 import "./HallDetailPage.css";
@@ -18,24 +19,22 @@ const HallDetailPage = () => {
   const navigate = useNavigate();
   const [hall, setHall] = useState(null);
   const [selectedPkg, setSelectedPkg] = useState(null);
+  const [lightbox, setLightbox] = useState({ open: false, index: 0 });
+
+  // ── Wishlist state — reads from localStorage on mount ──
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [wishToast, setWishToast] = useState("");
 
   useEffect(() => {
     loadHall();
   }, [id]);
-  const [lightbox, setLightbox] = useState({ open: false, index: 0 });
 
-  const galleryImages = [
-    hall?.imageURL,
-    "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800",
-    "https://images.unsplash.com/photo-1478146059778-26028b07395a?w=800",
-    "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800",
-    "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800",
-  ];
   const loadHall = async () => {
     try {
       const res = await getHallById(id);
       setHall(res.data);
       if (res.data.packages?.length > 0) setSelectedPkg(res.data.packages[0]);
+      checkWishlist(res.data.hallID);
     } catch {
       const sample = {
         hallID: id,
@@ -67,16 +66,73 @@ const HallDetailPage = () => {
       };
       setHall(sample);
       setSelectedPkg(sample.packages[0]);
+      checkWishlist(sample.hallID);
     }
+  };
+
+  // ── Check if this hall is already in wishlist ──
+  const checkWishlist = (hallID) => {
+    const saved = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    setIsWishlisted(saved.some((h) => String(h.hallID) === String(hallID)));
+  };
+
+  // ── Toggle wishlist — add or remove ──
+  const handleWishlist = () => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    const saved = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    const already = saved.some((h) => String(h.hallID) === String(hall.hallID));
+
+    let updated;
+    if (already) {
+      // Remove from wishlist
+      updated = saved.filter((h) => String(h.hallID) !== String(hall.hallID));
+      setIsWishlisted(false);
+      showToast("Removed from wishlist");
+    } else {
+      // Add to wishlist — save enough data for the profile card
+      updated = [
+        ...saved,
+        {
+          hallID: hall.hallID,
+          name: hall.name,
+          location: hall.location,
+          imageURL: hall.imageURL,
+          pricePerDay: hall.pricePerDay,
+        },
+      ];
+      setIsWishlisted(true);
+      showToast("Added to wishlist! View it in your Profile.");
+    }
+
+    localStorage.setItem("wishlist", JSON.stringify(updated));
+  };
+
+  // ── Toast notification ──
+  const showToast = (msg) => {
+    setWishToast(msg);
+    setTimeout(() => setWishToast(""), 3000);
   };
 
   if (!hall) return <div className="loading">Loading...</div>;
 
-  // DYNAMIC PRICING (Updates automatically when selectedPkg changes)
+  // ── Dynamic pricing ──
   const hallFee = hall.pricePerDay;
   const pkgFee = selectedPkg?.price || 0;
   const tax = Math.round((hallFee + pkgFee) * 0.1);
   const total = hallFee + pkgFee + tax;
+
+  const galleryImages = [
+    hall.imageURL,
+    "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800",
+    "https://images.unsplash.com/photo-1478146059778-26028b07395a?w=800",
+    "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800",
+    "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800",
+  ];
 
   const amenities = [
     { icon: <Snowflake size={20} />, name: "AC" },
@@ -88,11 +144,27 @@ const HallDetailPage = () => {
 
   return (
     <div className="detail-page">
-      {/* IMAGE GALLERY */}
+      {/* ── Toast notification ── */}
+      {wishToast && (
+        <div className="wish-toast">
+          <Heart size={15} fill={isWishlisted ? "#c9a84c" : "none"} />{" "}
+          {wishToast}
+          {isWishlisted && (
+            <button
+              className="wish-toast-link"
+              onClick={() => navigate("/profile")}
+            >
+              Go to Profile →
+            </button>
+          )}
+        </div>
+      )}
+
       {/* IMAGE GALLERY */}
       <div className="detail-gallery">
         <div
           className="gallery-main"
+          style={{ cursor: "zoom-in" }}
           onClick={() => setLightbox({ open: true, index: 0 })}
         >
           <img
@@ -209,6 +281,7 @@ const HallDetailPage = () => {
         </div>
       )}
 
+      {/* ── MAIN CONTENT ── */}
       <div className="detail-container">
         <div className="detail-main">
           {/* LEFT: INFO */}
@@ -219,12 +292,13 @@ const HallDetailPage = () => {
                 <MapPin size={16} /> {hall.address || hall.location}
               </span>
               <span className="detail-rating">
-                <Star size={16} fill="#ff6b6b" stroke="#ff6b6b" /> 4.8 (124
+                <Star size={16} fill="#c9a84c" stroke="#c9a84c" /> 4.8 (124
                 reviews)
               </span>
             </div>
             <p className="detail-desc">{hall.description}</p>
 
+            {/* Amenities */}
             <div className="amenities-section">
               <h2>Amenities</h2>
               <div className="amenities-grid">
@@ -237,6 +311,7 @@ const HallDetailPage = () => {
               </div>
             </div>
 
+            {/* Capacity */}
             <div className="capacity-section">
               <h2>Capacity</h2>
               <div className="capacity-bar">
@@ -244,12 +319,13 @@ const HallDetailPage = () => {
                   <Users size={16} /> Min: 100 Guests
                 </span>
                 <div className="bar">
-                  <div className="bar-fill" style={{ width: "70%" }}></div>
+                  <div className="bar-fill" style={{ width: "70%" }} />
                 </div>
                 <span>Max: {hall.capacity} Guests</span>
               </div>
             </div>
 
+            {/* Packages */}
             <div className="packages-section">
               <h2>Packages</h2>
               <div className="packages-grid">
@@ -278,18 +354,20 @@ const HallDetailPage = () => {
 
           {/* RIGHT: BOOKING CARD */}
           <div className="booking-form-wrapper">
+            {/* Price header */}
             <div className="booking-price-header">
               <h2>Rs {total?.toLocaleString()}</h2>
               <span>/ Total</span>
             </div>
-            {/* Add this ABOVE booking-summary in your JSX */}
+
+            {/* Price breakdown */}
             <div className="booking-price-breakdown">
               <div className="price-breakdown-row">
                 <span>Hall Fee</span>
                 <span>Rs {hallFee?.toLocaleString()}</span>
               </div>
               <div className="price-breakdown-row">
-                <span>Package ({selectedPkg?.name})</span>
+                <span>Package ({selectedPkg?.name || "None"})</span>
                 <span>Rs {pkgFee?.toLocaleString()}</span>
               </div>
               <div className="price-breakdown-row tax-row">
@@ -302,8 +380,7 @@ const HallDetailPage = () => {
               </div>
             </div>
 
-            {/* Add this AFTER wishlist-btn */}
-            <p className="booking-note">30% advance required at booking</p>
+            {/* Summary */}
             <div className="booking-summary">
               {selectedPkg && (
                 <p>
@@ -312,8 +389,10 @@ const HallDetailPage = () => {
               )}
               <p>Guests: Up to {hall.capacity}</p>
             </div>
+
+            {/* Book Now */}
             <button
-              className="btn-primary book-now-btn"
+              className="book-now-btn"
               onClick={() =>
                 navigate(`/book/${hall.hallID}`, {
                   state: { hall, package: selectedPkg },
@@ -322,9 +401,21 @@ const HallDetailPage = () => {
             >
               Book Now
             </button>
-            <button className="btn-secondary wishlist-btn">
-              ♡ Add to Wishlist
+
+            {/* ── Wishlist Button — FULLY WORKING ── */}
+            <button
+              className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""}`}
+              onClick={handleWishlist}
+            >
+              <Heart
+                size={17}
+                fill={isWishlisted ? "#c9a84c" : "none"}
+                stroke={isWishlisted ? "#c9a84c" : "currentColor"}
+              />
+              {isWishlisted ? "Saved to Wishlist" : "Add to Wishlist"}
             </button>
+
+            <p className="booking-note">30% advance required at booking</p>
           </div>
         </div>
       </div>

@@ -1,5 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminLayout from "./components/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminHalls from "./pages/admin/AdminHalls";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -24,6 +28,31 @@ function App() {
         <Navbar />
         <main className="main-content">
           <Routes>
+            {/* ADMIN ROUTES */}
+            <Route
+              path="/admin"
+              element={
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/halls"
+              element={
+                <AdminLayout>
+                  <AdminHalls />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/bookings"
+              element={
+                <AdminLayout>
+                  <AdminBookings />
+                </AdminLayout>
+              }
+            />
             <Route path="/" element={<HomePage />} />
             <Route path="/halls" element={<HallsPage />} />
             <Route path="/halls/:id" element={<HallDetailPage />} />

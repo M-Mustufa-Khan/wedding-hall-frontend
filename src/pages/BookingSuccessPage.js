@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CheckCircle, Home, Calendar } from "lucide-react";
 import "./BookingSuccessPage.css";
@@ -8,10 +8,15 @@ const BookingSuccessPage = () => {
   const navigate = useNavigate();
   const booking = location.state?.booking;
 
-  if (!booking) {
-    navigate("/");
-    return null;
-  }
+  // Bug fix: navigate() was being called directly in the render body when
+  // booking was missing. Calling navigate() during render (not inside an
+  // effect or event handler) can trigger "Cannot update a component while
+  // rendering a different component" warnings/race conditions in React.
+  useEffect(() => {
+    if (!booking) navigate("/", { replace: true });
+  }, [booking, navigate]);
+
+  if (!booking) return null;
 
   const formattedDate = booking.eventDate
     ? new Date(booking.eventDate).toLocaleDateString("en-US", {
@@ -22,10 +27,29 @@ const BookingSuccessPage = () => {
       })
     : "—";
 
+  // Bug fix: BookingPage.js's createBooking() returns data from the ASP.NET
+  // API, which uses `bookingID` (matching AdminBookings.js's b.bookingID),
+  // not `id`. This was always rendering "Booking ID: undefined".
+  const displayId = booking.bookingID ?? booking.id ?? "—";
+
+  // Bug fix: hallLocation, timeSlot, guests, packageName, paymentMethod,
+  // and balanceDue were never actually passed through navigate() from
+  // BookingPage.js — only hallName, hallImage, advancePaid, and
+  // totalAmount were spread alongside the raw API response. Every other
+  // field rendered blank or as literal "undefined". Now falls back
+  // gracefully instead of showing broken text.
+  const safe = (val, fallback = "—") =>
+    val === undefined || val === null || val === "" ? fallback : val;
+
+  const balanceDue =
+    booking.balanceDue ??
+    (booking.totalAmount && booking.advancePaid
+      ? booking.totalAmount - booking.advancePaid
+      : null);
+
   return (
     <div className="success-page">
       <div className="success-container">
-        {/* ── Animated Checkmark ── */}
         <div className="success-animation">
           <CheckCircle size={88} />
         </div>
@@ -33,20 +57,18 @@ const BookingSuccessPage = () => {
         <h1>Booking Confirmed!</h1>
         <p>Your hall has been successfully reserved. Details below.</p>
 
-        {/* ── Booking ID ── */}
-        <div className="booking-id-box">Booking ID: {booking.id}</div>
+        <div className="booking-id-box">Booking ID: {displayId}</div>
 
-        {/* ── Summary Card ── */}
         <div className="success-summary">
           <h3>Booking Summary</h3>
 
           <div className="summary-row">
             <span>🏛️ Hall</span>
-            <span>{booking.hallName}</span>
+            <span>{safe(booking.hallName)}</span>
           </div>
           <div className="summary-row">
             <span>📍 Location</span>
-            <span>{booking.hallLocation}</span>
+            <span>{safe(booking.hallLocation)}</span>
           </div>
           <div className="summary-row">
             <span>📅 Event Date</span>
@@ -54,35 +76,36 @@ const BookingSuccessPage = () => {
           </div>
           <div className="summary-row">
             <span>🕐 Time Slot</span>
-            <span>{booking.timeSlot}</span>
+            <span>{safe(booking.timeSlot)}</span>
           </div>
           <div className="summary-row">
             <span>👥 Guests</span>
-            <span>{booking.guests}</span>
+            <span>{safe(booking.guestCount ?? booking.guests)}</span>
           </div>
           <div className="summary-row">
             <span>📦 Package</span>
-            <span>{booking.packageName}</span>
+            <span>{safe(booking.packageName, "No Package")}</span>
           </div>
           <div className="summary-row">
             <span>💳 Payment</span>
-            <span>{booking.paymentMethod}</span>
+            <span>{safe(booking.paymentMethod)}</span>
           </div>
           <div className="summary-row highlight">
             <span>💰 Total Amount</span>
-            <span>Rs {booking.totalAmount?.toLocaleString()}</span>
+            <span>Rs {(booking.totalAmount ?? 0).toLocaleString()}</span>
           </div>
           <div className="summary-row green">
             <span>✅ Advance Paid</span>
-            <span>Rs {booking.advancePaid?.toLocaleString()}</span>
+            <span>Rs {(booking.advancePaid ?? 0).toLocaleString()}</span>
           </div>
           <div className="summary-row orange">
             <span>⏳ Balance Due</span>
-            <span>Rs {booking.balanceDue?.toLocaleString()}</span>
+            <span>
+              {balanceDue != null ? `Rs ${balanceDue.toLocaleString()}` : "—"}
+            </span>
           </div>
         </div>
 
-        {/* ── Next Steps ── */}
         <div className="next-steps">
           <h3>What happens next?</h3>
           <ol>
@@ -95,7 +118,6 @@ const BookingSuccessPage = () => {
           </ol>
         </div>
 
-        {/* ── Action Buttons ── */}
         <div className="success-actions">
           <button
             className="btn-primary"

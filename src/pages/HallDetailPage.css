@@ -617,33 +617,82 @@
     font-size: 1.6rem;
   }
 }
-/* ── Gallery main hover overlay ── */
-.gallery-main {
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
+
+/* ============================================
+   WISHLIST BUTTON — Active State
+   ============================================ */
+.wishlist-btn.wishlisted {
+  border-color: #c9a84c;
+  color: #c9a84c;
+  background: rgba(201, 168, 76, 0.07);
 }
 
-.gallery-main-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
-  color: #fff;
-  padding: 24px 20px 16px;
-  font-size: 0.85rem;
+.wishlist-btn.wishlisted:hover {
+  background: rgba(201, 168, 76, 0.14);
+  border-color: #e8c97a;
+}
+
+/* ============================================
+   WISHLIST TOAST NOTIFICATION
+   ============================================ */
+.wish-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #161616;
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  color: #e0e0e0;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 0.88rem;
   font-weight: 600;
-  opacity: 0;
-  transition: opacity 0.25s;
-  letter-spacing: 0.04em;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  animation: toastIn 0.3s ease;
+  white-space: nowrap;
 }
 
-.gallery-main:hover .gallery-main-overlay {
-  opacity: 1;
+.wish-toast svg {
+  color: #c9a84c;
+  flex-shrink: 0;
 }
 
-/* ── Lightbox Overlay ── */
+.wish-toast-link {
+  background: transparent;
+  border: none;
+  color: #c9a84c;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin-left: 4px;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.wish-toast-link:hover {
+  color: #e8c97a;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+/* ============================================
+   LIGHTBOX MODAL
+   ============================================ */
+
 .lightbox-overlay {
   position: fixed;
   inset: 0;
@@ -653,120 +702,108 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 30px;
 }
 
-/* ── Lightbox Modal Box ── */
 .lightbox-modal {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  max-width: 900px;
   width: 100%;
-}
-
-/* ── Main Image ── */
-.lightbox-img {
-  width: 100%;
-  max-height: 65vh;
-  object-fit: contain;
-  border-radius: 12px;
-  display: block;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
-}
-
-/* ── Close Button ── */
-.lightbox-close {
-  position: absolute;
-  top: -48px;
-  right: 0;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-size: 1rem;
-  cursor: pointer;
+  max-width: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
-  z-index: 2;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* Close button */
+.lightbox-close {
+  position: absolute;
+  top: -55px;
+  right: 0;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .lightbox-close:hover {
-  background: rgba(201, 168, 76, 0.3);
-  border-color: #c9a84c;
+  background: rgba(201, 168, 76, 0.25);
+  color: #c9a84c;
 }
 
-/* ── Counter (1 / 5) ── */
+/* Counter */
 .lightbox-counter {
   position: absolute;
-  top: -48px;
+  top: -50px;
   left: 0;
-  color: #aaa;
-  font-size: 0.85rem;
+  color: #fff;
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
 }
 
-/* ── Left / Right Arrows ── */
+/* Arrows */
 .lightbox-arrow {
   position: absolute;
   top: 50%;
-  transform: translateY(-60%);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
-  width: 48px;
-  height: 48px;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
   font-size: 2rem;
-  line-height: 1;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    background 0.2s,
-    border-color 0.2s;
+  transition: all 0.2s ease;
   z-index: 2;
 }
 
 .lightbox-arrow:hover {
   background: rgba(201, 168, 76, 0.25);
-  border-color: #c9a84c;
+  color: #c9a84c;
 }
 
 .lightbox-arrow.left {
-  left: -64px;
-}
-.lightbox-arrow.right {
-  right: -64px;
+  left: -70px;
 }
 
-/* ── Thumbnail Strip ── */
+.lightbox-arrow.right {
+  right: -70px;
+}
+
+/* Thumbnails */
 .lightbox-thumbs {
+  position: absolute;
+  bottom: -90px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .lightbox-thumb {
-  width: 64px;
-  height: 48px;
+  width: 70px;
+  height: 55px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.45;
   border: 2px solid transparent;
-  transition:
-    opacity 0.2s,
-    border-color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .lightbox-thumb:hover {
@@ -777,21 +814,40 @@
   opacity: 1;
   border-color: #c9a84c;
 }
+.gallery-thumbs img {
+  cursor: zoom-in;
+}
 
-/* ── Mobile ── */
-@media (max-width: 600px) {
+/* Mobile */
+@media (max-width: 768px) {
+  .lightbox-overlay {
+    padding: 15px;
+  }
+
+  .lightbox-img {
+    max-height: 70vh;
+  }
+
   .lightbox-arrow.left {
-    left: 0;
+    left: 10px;
   }
+
   .lightbox-arrow.right {
-    right: 0;
+    right: 10px;
   }
+
   .lightbox-arrow {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     font-size: 1.5rem;
   }
-  .lightbox-img {
-    max-height: 55vh;
+
+  .lightbox-thumbs {
+    bottom: -75px;
+  }
+
+  .lightbox-thumb {
+    width: 55px;
+    height: 45px;
   }
 }

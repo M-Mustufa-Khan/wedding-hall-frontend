@@ -311,3 +311,36 @@
     justify-content: center;
   }
 }
+/* ============================================
+   MISSING STYLES
+   ============================================ */
+
+/* Summary row icons alignment */
+.summary-row span:first-child svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* Action buttons icon alignment */
+.success-actions .btn-primary svg,
+.success-actions .btn-secondary svg {
+  flex-shrink: 0;
+}
+
+/* Better box sizing */
+.success-page *,
+.success-page *::before,
+.success-page *::after {
+  box-sizing: border-box;
+}
+
+/* Prevent long text overflow */
+.summary-row span:last-child {
+  word-break: break-word;
+}
+
+/* Booking ID wrapping protection */
+.booking-id-box {
+  word-break: break-word;
+}

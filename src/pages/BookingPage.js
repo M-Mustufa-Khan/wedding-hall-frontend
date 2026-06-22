@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { createBooking, checkHallAvailability } from "../services/api";
 import {
   Check,
   ChevronLeft,
@@ -7,7 +8,6 @@ import {
   Building,
   AlertCircle,
   Upload,
-  X,
 } from "lucide-react";
 import "./BookingPage.css";
 
@@ -20,16 +20,19 @@ const BookingPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isAvailable, setIsAvailable] = useState(null);
+  const [conflictDate, setConflictDate] = useState(null);
   const [receiptPreview, setReceiptPreview] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
     cnic: "",
+    address: "",
     eventDate: "",
     eventType: "Wedding",
-    timeSlot: "Evening",
+    timeSlot: "Evening (5pm-11pm)",
     guestCount: 200,
     specialRequests: "",
     terms: false,
@@ -49,8 +52,9 @@ const BookingPage = () => {
         ...prev,
         fullName: user.fullName || "",
         email: user.email || "",
+        phone: user.phone || "",
       }));
-  }, []);
+  }, [hall, navigate]);
 
   if (!hall) return null;
 
@@ -78,13 +82,17 @@ const BookingPage = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setReceiptPreview(reader.result); // Base64 string
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      setErrors({ ...errors, receipt: "File is too large. Max size is 2MB." });
+      return;
     }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setReceiptPreview(reader.result);
+      if (errors.receipt) setErrors({ ...errors, receipt: "" });
+    };
+    reader.readAsDataURL(file);
   };
 
   const validateStep1 = () => {
@@ -104,15 +112,33 @@ const BookingPage = () => {
     return Object.keys(errs).length === 0;
   };
 
-  const checkAvailability = () => {
+  const checkAvailability = async () => {
     setIsLoading(true);
-    setTimeout(() => {
+    setIsAvailable(null);
+    setConflictDate(null);
+    try {
       const selectedDate = new Date(formData.eventDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      setIsAvailable(selectedDate >= today);
+
+      if (selectedDate < today) {
+        setIsAvailable(false);
+        setIsLoading(false);
+        return;
+      }
+
+      const res = await checkHallAvailability(hall.hallID, formData.eventDate);
+      setIsAvailable(res.data);
+      if (!res.data) setConflictDate(formData.eventDate);
+    } catch {
+      setErrors({
+        ...errors,
+        availability: "Could not connect to server to verify availability.",
+      });
+      setIsAvailable(null);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const validateStep3 = () => {
@@ -123,6 +149,11 @@ const BookingPage = () => {
         errs.cardNumber = "Must be 16 digits";
       if (!formData.expiry || !/^\d{2}\/\d{2}$/.test(formData.expiry))
         errs.expiry = "Format MM/YY";
+      else {
+        const [mm, yy] = formData.expiry.split("/").map(Number);
+        const expDate = new Date(2000 + yy, mm);
+        if (expDate < new Date()) errs.expiry = "Card has expired";
+      }
       if (!formData.cvv || formData.cvv.length !== 3)
         errs.cvv = "Must be 3 digits";
     } else {
@@ -133,45 +164,57 @@ const BookingPage = () => {
     return Object.keys(errs).length === 0;
   };
 
-  const handleConfirmBooking = () => {
+  const handleConfirmBooking = async () => {
     if (!validateStep3()) return;
+    if (submitting) return;
 
-    const newBooking = {
-      id: "BK-" + Date.now(),
-      hallId: hall.hallID,
-      hallName: hall.name,
-      hallImage: hall.imageURL,
-      hallLocation: hall.location,
-      customerName: formData.fullName,
-      customerEmail: formData.email,
-      customerPhone: formData.phone,
-      cnic: formatCNIC(formData.cnic),
-      eventDate: formData.eventDate,
-      eventType: formData.eventType,
-      timeSlot: formData.timeSlot,
-      guests: formData.guestCount,
-      packageName: selectedPkg?.name || "No Package",
-      packagePrice: pkgFee,
-      hallPrice: hallFee,
-      totalAmount: total,
-      advancePaid: advance,
-      balanceDue: balance,
-      paymentMethod: formData.paymentMethod,
-      receiptImage: receiptPreview, // Save the Base64 image for Admin!
-      status: "Pending",
-      bookedAt: new Date().toISOString(),
-    };
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user) {
+      navigate("/login");
+      return;
+    }
 
-    const existingBookings = JSON.parse(
-      localStorage.getItem("myBookings") || "[]",
-    );
-    existingBookings.push(newBooking);
-    localStorage.setItem("myBookings", JSON.stringify(existingBookings));
+    setSubmitting(true);
+    try {
+      const res = await createBooking({
+        userID: user.userID,
+        hallID: hall.hallID,
+        packageID: selectedPkg?.packageID || null,
+        eventDate: formData.eventDate,
+        eventType: formData.eventType,
+        guestCount: parseInt(formData.guestCount),
+        totalPrice: total,
+        customerPhone: formData.phone,
+        cnic: formatCNIC(formData.cnic),
+        customerAddress: formData.address,
+        paymentMethod: formData.paymentMethod,
+        receiptImage: receiptPreview || null,
+        transactionRef: formData.transactionRef || null,
+        specialNotes: `${formData.timeSlot}${formData.specialRequests ? " | " + formData.specialRequests : ""}`,
+      });
 
-    navigate("/booking-success", { state: { booking: newBooking } });
+      navigate("/booking-success", {
+        state: {
+          booking: {
+            ...res.data,
+            hallName: hall.name,
+            hallImage: hall.imageURL,
+            advancePaid: advance,
+            totalAmount: total,
+          },
+        },
+      });
+    } catch (err) {
+      setErrors({
+        submit:
+          err.response?.data?.message ||
+          "Booking failed. The hall might already be booked on this date.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Format date nicely for display
   const formattedDate = formData.eventDate
     ? new Date(formData.eventDate).toLocaleDateString("en-US", {
         weekday: "long",
@@ -206,6 +249,7 @@ const BookingPage = () => {
 
         <div className="booking-layout">
           <div className="booking-form-section">
+            {/* STEP 1 */}
             {step === 1 && (
               <div className="step-content">
                 <h2>Step 1: Your Information</h2>
@@ -320,6 +364,15 @@ const BookingPage = () => {
                       <option>Full Day</option>
                     </select>
                   </div>
+                  <div className="form-group full">
+                    <label>Address (optional)</label>
+                    <input
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder="Your home or office address"
+                    />
+                  </div>
                 </div>
                 <div className="step-actions">
                   <button
@@ -332,11 +385,19 @@ const BookingPage = () => {
               </div>
             )}
 
+            {/* STEP 2 */}
             {step === 2 && (
               <div className="step-content">
                 <h2>Step 2: Hall Availability</h2>
+
+                {errors.availability && (
+                  <div className="global-error">
+                    <AlertCircle size={16} /> {errors.availability}
+                  </div>
+                )}
+
                 <div className="availability-check">
-                  {!isAvailable && !isLoading && (
+                  {isAvailable === null && !isLoading && (
                     <div className="av-card pending">
                       <div className="av-icon-large">📅</div>
                       <h3>Verify Your Date</h3>
@@ -382,12 +443,24 @@ const BookingPage = () => {
                       <div className="av-icon-large">❌</div>
                       <h3>Not Available</h3>
                       <p className="av-text">
-                        Unfortunately, this hall is already booked or the date
-                        is invalid.
+                        {conflictDate ? (
+                          <>
+                            Unfortunately, <strong>{hall.name}</strong> is
+                            already booked on <strong>{formattedDate}</strong>.
+                          </>
+                        ) : (
+                          <>
+                            That date has already passed. Please choose a future
+                            date.
+                          </>
+                        )}
                       </p>
                       <button
                         className="btn-secondary av-btn"
-                        onClick={() => setStep(1)}
+                        onClick={() => {
+                          setStep(1);
+                          setIsAvailable(null);
+                        }}
                       >
                         Change Date
                       </button>
@@ -402,6 +475,7 @@ const BookingPage = () => {
               </div>
             )}
 
+            {/* STEP 3 */}
             {step === 3 && (
               <div className="step-content">
                 <h2>Step 3: Payment</h2>
@@ -509,7 +583,6 @@ const BookingPage = () => {
                         upload receipt below.
                       </p>
                     </div>
-
                     <div className="form-group full">
                       <label>Transaction Reference *</label>
                       <input
@@ -524,8 +597,6 @@ const BookingPage = () => {
                         </span>
                       )}
                     </div>
-
-                    {/* UPLOAD RECEIPT AREA */}
                     <div className="upload-section">
                       <label className="upload-label">
                         <input
@@ -562,15 +633,28 @@ const BookingPage = () => {
                   </div>
                 )}
 
+                {errors.submit && (
+                  <div className="global-error">
+                    <AlertCircle size={16} /> {errors.submit}
+                  </div>
+                )}
+
                 <div className="step-actions">
-                  <button className="btn-secondary" onClick={() => setStep(2)}>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => setStep(2)}
+                    disabled={submitting}
+                  >
                     <ChevronLeft size={16} /> Back
                   </button>
                   <button
                     className="btn-primary confirm-btn"
                     onClick={handleConfirmBooking}
+                    disabled={submitting}
                   >
-                    Pay Rs {advance.toLocaleString()} & Confirm
+                    {submitting
+                      ? "Processing…"
+                      : `Pay Rs ${advance.toLocaleString()} & Confirm`}
                   </button>
                 </div>
               </div>

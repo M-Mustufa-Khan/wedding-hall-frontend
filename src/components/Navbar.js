@@ -11,6 +11,7 @@ import {
   Images,
   Info,
   Mail,
+  Shield, // ✅ ADDED SHIELD ICON
 } from "lucide-react";
 import "./Navbar.css";
 
@@ -103,6 +104,14 @@ const Navbar = () => {
                 <Link to="/profile" className="nav-link-small">
                   <User size={15} /> Profile
                 </Link>
+
+                {/* ✅ ADMIN LINK - Only visible to Admins */}
+                {user.role === "Admin" && (
+                  <Link to="/admin" className="nav-link-small admin-nav-link">
+                    <Shield size={15} /> Admin Panel
+                  </Link>
+                )}
+
                 <button className="nav-btn logout-btn" onClick={handleLogout}>
                   Logout
                 </button>
@@ -165,6 +174,18 @@ const Navbar = () => {
                 <Link to="/profile" className="nav-link-small" onClick={close}>
                   <User size={16} /> Profile
                 </Link>
+
+                {/* ✅ ADMIN LINK - Only visible to Admins on Mobile */}
+                {user.role === "Admin" && (
+                  <Link
+                    to="/admin"
+                    className="nav-link-small admin-nav-link"
+                    onClick={close}
+                  >
+                    <Shield size={16} /> Admin Panel
+                  </Link>
+                )}
+
                 <button className="nav-btn logout-btn" onClick={handleLogout}>
                   Logout
                 </button>

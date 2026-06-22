@@ -64,7 +64,7 @@ const ContactPage = () => {
                 <Phone size={20} />
                 <div>
                   <h4>Phone</h4>
-                  <a href="tel:+923001234567">+92 300 1234567</a>
+                  <a href="tel:+923182255708">+92 318 225 5708</a>
                 </div>
               </div>
               <div className="info-card">
@@ -80,7 +80,7 @@ const ContactPage = () => {
                 <MapPin size={20} />
                 <div>
                   <h4>Address</h4>
-                  <p>123 Mall Road, Lahore, Pakistan</p>
+                  <p>Nazimabad No. 123, Karachi, Pakistan</p>
                 </div>
               </div>
               <div className="info-card">
@@ -97,7 +97,7 @@ const ContactPage = () => {
             </div>
 
             <a
-              href="https://wa.me/923001234567"
+              href="https://wa.me/923182255708"
               className="whatsapp-btn"
               target="_blank"
               rel="noreferrer"

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminHalls from "./pages/admin/AdminHalls";
+import AdminContacts from "./pages/admin/AdminContacts";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -22,6 +23,45 @@ import ContactPage from "./pages/ContactPage";
 import ProfilePage from "./pages/ProfilePage";
 
 function App() {
+  useEffect(() => {
+    const setupRevealObserver = () => {
+      const revealElements = document.querySelectorAll(
+        ".reveal:not(.active), .reveal-left:not(.active), .reveal-right:not(.active), .reveal-scale:not(.active), .reveal-fade:not(.active)"
+      );
+
+      const observer = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+
+      revealElements.forEach((el) => observer.observe(el));
+      return observer;
+    };
+
+    // Initial setup
+    let observer = setupRevealObserver();
+
+    // Re-run setup on DOM mutations to capture dynamically rendered content
+    const mutationObserver = new MutationObserver(() => {
+      observer.disconnect();
+      observer = setupRevealObserver();
+    });
+
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
+  }, []);
+
   return (
     <Router>
       <div className="app">
@@ -50,6 +90,14 @@ function App() {
               element={
                 <AdminLayout>
                   <AdminBookings />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/contacts"
+              element={
+                <AdminLayout>
+                  <AdminContacts />
                 </AdminLayout>
               }
             />

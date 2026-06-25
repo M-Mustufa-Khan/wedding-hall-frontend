@@ -1,15 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, X, MessageCircle } from "lucide-react";
+import {
+  Check,
+  X,
+  MessageCircle,
+  ChevronRight,
+  Home,
+  Utensils,
+  Camera,
+  Video,
+  Music2,
+  Flower2,
+  Cake,
+  Sparkles,
+  Car,
+} from "lucide-react";
 import "./PackagesPage.css";
 
 const PACKAGES = [
   {
     id: 1,
     name: "Basic",
+    tier: "Silver",
+    icon: "✦",
     tagline: "Perfect for intimate gatherings",
     price: 80000,
-    color: "#888",
     features: [
       { text: "Hall Only", included: true },
       { text: "Basic Seating", included: true },
@@ -27,10 +42,11 @@ const PACKAGES = [
   {
     id: 2,
     name: "Standard",
+    tier: "Gold",
+    icon: "💍",
     tagline: "Most popular choice for weddings",
     price: 150000,
     popular: true,
-    color: "#d4af37",
     features: [
       { text: "Hall + Full Setup", included: true },
       { text: "Premium Seating", included: true },
@@ -48,9 +64,10 @@ const PACKAGES = [
   {
     id: 3,
     name: "Premium",
+    tier: "Platinum",
+    icon: "👑",
     tagline: "The ultimate luxury experience",
     price: 280000,
-    color: "#e8c97a",
     features: [
       { text: "Hall + Full Setup", included: true },
       { text: "Luxury Seating", included: true },
@@ -69,49 +86,57 @@ const PACKAGES = [
 
 const ADDONS = [
   {
-    icon: "🍽️",
+    icon: Utensils,
+    emoji: "🍽️",
     name: "Catering",
     desc: "Per plate pricing",
     price: "Rs 1,500 / plate",
   },
   {
-    icon: "📸",
+    icon: Camera,
+    emoji: "📸",
     name: "Photography",
     desc: "Full event coverage",
     price: "Rs 25,000",
   },
   {
-    icon: "🎥",
+    icon: Video,
+    emoji: "🎥",
     name: "Videography",
     desc: "Cinematic highlights",
     price: "Rs 30,000",
   },
   {
-    icon: "🎵",
+    icon: Music2,
+    emoji: "🎵",
     name: "DJ & Sound",
     desc: "Pro sound system + DJ",
     price: "Rs 20,000",
   },
   {
-    icon: "🌸",
+    icon: Flower2,
+    emoji: "🌸",
     name: "Decoration",
     desc: "Floral & theme setup",
     price: "Rs 35,000",
   },
   {
-    icon: "🎂",
+    icon: Cake,
+    emoji: "🎂",
     name: "Wedding Cake",
     desc: "Custom 3-tier cake",
     price: "Rs 8,000",
   },
   {
-    icon: "✨",
+    icon: Sparkles,
+    emoji: "✨",
     name: "Fireworks",
     desc: "Indoor safe sparklers",
     price: "Rs 15,000",
   },
   {
-    icon: "🚗",
+    icon: Car,
+    emoji: "🚗",
     name: "Valet Parking",
     desc: "For up to 100 vehicles",
     price: "Rs 10,000",
@@ -137,13 +162,13 @@ const Cell = ({ val }) => {
   if (val === true)
     return (
       <span className="cell-yes">
-        <Check size={16} />
+        <Check size={15} />
       </span>
     );
   if (val === false)
     return (
       <span className="cell-no">
-        <X size={16} />
+        <X size={15} />
       </span>
     );
   return <span className="cell-val">{val}</span>;
@@ -154,118 +179,185 @@ const PackagesPage = () => {
 
   return (
     <div className="packages-page">
-      {/* Hero */}
-      <div className="pkg-hero">
-        <p className="section-tag">✦ Pricing</p>
-        <h1>Our Packages</h1>
-        <p className="pkg-hero-sub">
-          Choose the perfect package for your special day
-        </p>
+      {/* ── Hero ── */}
+      <section className="page-hero">
+        <div
+          className="hero-bg"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1600&q=80')",
+          }}
+        />
+        <div className="hero-overlay" aria-hidden="true" />
+        <div className="hero-inner">
+          <span className="hero-tag">✦ Our Packages</span>
+          <h1 className="hero-h1">Choose Your Perfect Package</h1>
+          <p className="hero-sub">
+            Transparent pricing crafted for every celebration — from intimate
+            gatherings to grand affairs.
+          </p>
+          <nav className="hero-breadcrumb" aria-label="Breadcrumb">
+            <Link to="/">
+              <Home size={13} />
+              Home
+            </Link>
+            <ChevronRight size={13} />
+            <span>Packages</span>
+          </nav>
+        </div>
+      </section>
+
+      {/* ── Billing toggle ── */}
+      <div className="pkg-toggle-row">
         <div className="billing-toggle">
-          <button
-            className={billing === "day" ? "active" : ""}
-            onClick={() => setBilling("day")}
-          >
-            Per Day
-          </button>
           <button
             className={billing === "event" ? "active" : ""}
             onClick={() => setBilling("event")}
           >
             Per Event
           </button>
+          <button
+            className={billing === "day" ? "active" : ""}
+            onClick={() => setBilling("day")}
+          >
+            Per Day
+          </button>
         </div>
       </div>
 
-      {/* Package Cards */}
-      <div className="pkg-container">
-        <div className="pkg-cards">
-          {PACKAGES.map((pkg) => (
-            <div
-              key={pkg.id}
-              className={`pkg-card ${pkg.popular ? "popular" : ""}`}
-            >
-              {pkg.popular && (
-                <div className="popular-badge">⭐ Most Popular</div>
-              )}
-              <div className="pkg-card-header">
-                <h2>{pkg.name}</h2>
+      {/* ── Package Cards ── */}
+      <section className="pkg-cards-section">
+        <div className="pkg-container">
+          <div className="section-heading-block">
+            <h2 className="section-heading">Our Pricing Plans</h2>
+            <p className="section-sub">
+              Every package is designed to deliver an unforgettable experience
+              for your special day.
+            </p>
+          </div>
+
+          <div className="pkg-cards">
+            {PACKAGES.map((pkg) => (
+              <div
+                key={pkg.id}
+                className={`pkg-card${pkg.popular ? " pkg-card--featured" : ""}`}
+              >
+                {pkg.popular && (
+                  <div className="popular-badge">Most Popular</div>
+                )}
+
+                <div className="pkg-tier-icon">{pkg.icon}</div>
+                <div className="pkg-tier-label">{pkg.tier}</div>
+                <h3 className="pkg-name">{pkg.name}</h3>
                 <p className="pkg-tagline">{pkg.tagline}</p>
-                <div className="pkg-price">
-                  <span className="price-amount">
+
+                <div className="pkg-price-row">
+                  <span className="pkg-price-amount">
                     Rs{" "}
                     {(billing === "day"
                       ? pkg.price * 0.6
                       : pkg.price
                     ).toLocaleString()}
                   </span>
-                  <span className="price-per">
+                  <span className="pkg-price-per">
                     / {billing === "day" ? "day" : "event"}
                   </span>
                 </div>
-              </div>
-              <ul className="pkg-features">
-                {pkg.features.map((f, i) => (
-                  <li key={i} className={f.included ? "included" : "excluded"}>
-                    {f.included ? <Check size={15} /> : <X size={15} />}
-                    {f.text}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/halls"
-                className={`pkg-btn ${pkg.popular ? "pkg-btn-gold" : ""}`}
-              >
-                Get Started
-              </Link>
-            </div>
-          ))}
-        </div>
 
-        {/* Custom Package */}
-        <div className="custom-pkg-banner">
-          <div>
-            <h3>Need Something Custom?</h3>
-            <p>
-              Build your own package with exactly what you need — we'll match
-              your budget.
-            </p>
-          </div>
-          <Link to="/contact" className="btn-outline-gold">
-            <MessageCircle size={18} /> Contact for Custom Package
-          </Link>
-        </div>
+                <div className="pkg-divider" />
 
-        {/* Add-ons */}
-        <div className="addons-section">
-          <p className="section-tag">✦ Extras</p>
-          <h2 className="section-title">Optional Add-Ons</h2>
-          <p className="section-subtitle">
-            Enhance your event with these premium services
-          </p>
-          <div className="addons-grid">
-            {ADDONS.map((a, i) => (
-              <div key={i} className="addon-card">
-                <div className="addon-icon">{a.icon}</div>
-                <div className="addon-info">
-                  <h4>{a.name}</h4>
-                  <p>{a.desc}</p>
-                </div>
-                <div className="addon-price">{a.price}</div>
+                <ul className="pkg-features">
+                  {pkg.features.map((f, i) => (
+                    <li
+                      key={i}
+                      className={`pkg-feature${f.included ? " pkg-feature--yes" : " pkg-feature--no"}`}
+                    >
+                      <span className="pkg-feature-icon">
+                        {f.included ? <Check size={13} /> : <X size={13} />}
+                      </span>
+                      {f.text}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  to="/halls"
+                  className={`pkg-cta${pkg.popular ? " pkg-cta--gold" : pkg.id === 3 ? " pkg-cta--premium" : " pkg-cta--ghost"}`}
+                >
+                  {pkg.popular ? "Get Started" : "Select Plan"}
+                </Link>
               </div>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Comparison Table */}
-        <div className="compare-section">
-          <p className="section-tag">✦ Compare</p>
-          <h2 className="section-title">Package Comparison</h2>
+      {/* ── Custom Package Banner ── */}
+      <div className="pkg-container">
+        <div className="custom-pkg-banner">
+          <div className="custom-pkg-text">
+            <h3>Need Something Custom?</h3>
+            <p>
+              Build your own package with exactly what you need — we'll match
+              your vision and your budget.
+            </p>
+          </div>
+          <Link to="/contact" className="btn-outline-gold">
+            <MessageCircle size={17} />
+            Contact for Custom Package
+          </Link>
+        </div>
+      </div>
+
+      {/* ── Add-ons Section ── */}
+      <section className="addons-section">
+        <div className="pkg-container">
+          <div className="section-heading-block">
+            <span className="section-tag-pill">✦ Extras</span>
+            <h2 className="section-heading">Optional Add-Ons</h2>
+            <p className="section-sub">
+              Enhance your celebration with these premium services — mix and
+              match to create your dream event.
+            </p>
+          </div>
+
+          <div className="addons-grid">
+            {ADDONS.map((a, i) => {
+              const IconComp = a.icon;
+              return (
+                <div key={i} className="addon-card">
+                  <div className="addon-icon-wrap">
+                    <IconComp size={20} />
+                  </div>
+                  <div className="addon-body">
+                    <h4 className="addon-name">{a.name}</h4>
+                    <p className="addon-desc">{a.desc}</p>
+                  </div>
+                  <div className="addon-price">{a.price}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Comparison Table ── */}
+      <section className="compare-section">
+        <div className="pkg-container">
+          <div className="section-heading-block">
+            <span className="section-tag-pill">✦ Compare</span>
+            <h2 className="section-heading">Package Comparison</h2>
+            <p className="section-sub">
+              See exactly what's included in each plan side by side.
+            </p>
+          </div>
+
           <div className="compare-table-wrap">
             <table className="compare-table">
               <thead>
                 <tr>
-                  <th>Feature</th>
+                  <th className="th-feature">Feature</th>
                   <th>Basic</th>
                   <th className="th-popular">Standard</th>
                   <th>Premium</th>
@@ -273,8 +365,8 @@ const PackagesPage = () => {
               </thead>
               <tbody>
                 {COMPARE_ROWS.map((row, i) => (
-                  <tr key={i}>
-                    <td className="feature-name">{row.feature}</td>
+                  <tr key={i} className={i % 2 === 0 ? "row-even" : "row-odd"}>
+                    <td className="td-feature">{row.feature}</td>
                     <td>
                       <Cell val={row.basic} />
                     </td>
@@ -290,8 +382,9 @@ const PackagesPage = () => {
             </table>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
+
 export default PackagesPage;

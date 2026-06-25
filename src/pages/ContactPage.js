@@ -1,5 +1,17 @@
 import React, { useState } from "react";
-import { Phone, Mail, MapPin, Clock, ChevronDown, Send } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  ChevronDown,
+  Send,
+  Camera,
+  Globe,
+  MessageCircle,
+  CheckCircle,
+} from "lucide-react";
+import { sendContact } from "../services/api";
 import "./ContactPage.css";
 
 const FAQS = [
@@ -25,210 +37,347 @@ const FAQS = [
   },
 ];
 
+const EMPTY_FORM = {
+  name: "",
+  email: "",
+  phone: "",
+  subject: "General Inquiry",
+  message: "",
+};
+
 const ContactPage = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "General Inquiry",
-    message: "",
-  });
-  const [status, setStatus] = useState("");
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState(""); // "" | "success" | "error"
+  const [submitting, setSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("success");
-    setTimeout(() => setStatus(""), 3000);
+    setSubmitting(true);
+    setStatus("");
+    try {
+      await sendContact({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
+      });
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="contact-page">
-      <div className="contact-hero">
-        <p className="section-tag">✦ Contact</p>
-        <h1>Get In Touch</h1>
-        <p>We're here to help plan your perfect day</p>
-      </div>
+      {/* ── HERO ── */}
+      <section className="page-hero contact-hero-section">
+        <div
+          className="hero-bg"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600')",
+          }}
+        />
+        <div className="hero-overlay" aria-hidden="true" />
+        <div className="hero-inner">
+          <span className="hero-tag">✦ Contact</span>
+          <h1 className="hero-h1">Get In Touch</h1>
+          <p className="hero-sub">
+            We're here to help plan your perfect celebration
+          </p>
+          <nav className="hero-breadcrumb" aria-label="breadcrumb">
+            <span>Home</span>
+            <span className="bc-sep">›</span>
+            <span className="bc-current">Contact</span>
+          </nav>
+        </div>
+      </section>
 
-      <div className="contact-container">
-        <div className="contact-layout">
-          {/* LEFT: Info */}
-          <div className="contact-info">
-            <h2>Contact Information</h2>
-            <p className="info-sub">
-              Reach out to us anytime. We usually respond within 24 hours.
-            </p>
+      {/* ── CONTACT BODY ── */}
+      <section className="contact-body-section">
+        <div className="contact-container">
+          <div className="contact-layout">
 
-            <div className="info-cards">
-              <div className="info-card">
-                <Phone size={20} />
-                <div>
-                  <h4>Phone</h4>
-                  <a href="tel:+923182255708">+92 318 225 5708</a>
+            {/* LEFT — info */}
+            <div className="contact-info">
+              <h2 className="info-heading">Contact Information</h2>
+              <p className="info-sub">
+                Reach out to us anytime. We usually respond within 24 hours.
+              </p>
+
+              <div className="info-cards">
+                <div className="contact-info-card">
+                  <div className="info-icon-sq">
+                    <Phone size={16} />
+                  </div>
+                  <div className="info-text">
+                    <span className="info-label">Phone</span>
+                    <a href="tel:+923182255708" className="info-value">
+                      +92 318 225 5708
+                    </a>
+                  </div>
+                </div>
+
+                <div className="contact-info-card">
+                  <div className="info-icon-sq">
+                    <Mail size={16} />
+                  </div>
+                  <div className="info-text">
+                    <span className="info-label">Email</span>
+                    <a
+                      href="mailto:info@elegantcelebrations.pk"
+                      className="info-value"
+                    >
+                      info@elegantcelebrations.pk
+                    </a>
+                  </div>
+                </div>
+
+                <div className="contact-info-card">
+                  <div className="info-icon-sq">
+                    <MapPin size={16} />
+                  </div>
+                  <div className="info-text">
+                    <span className="info-label">Location</span>
+                    <span className="info-value">
+                      Nazimabad No. 123, Karachi, Pakistan
+                    </span>
+                  </div>
+                </div>
+
+                <div className="contact-info-card">
+                  <div className="info-icon-sq">
+                    <Clock size={16} />
+                  </div>
+                  <div className="info-text">
+                    <span className="info-label">Working Hours</span>
+                    <span className="info-value">
+                      Mon – Sat: 9 AM – 8 PM
+                      <br />
+                      Sunday: 10 AM – 6 PM
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="info-card">
-                <Mail size={20} />
-                <div>
-                  <h4>Email</h4>
-                  <a href="mailto:info@elegantcelebrations.pk">
-                    info@elegantcelebrations.pk
-                  </a>
-                </div>
+
+              {/* Social row */}
+              <div className="social-icons-row">
+                <a
+                  href="https://wa.me/923182255708"
+                  className="social-icon-btn whatsapp"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="WhatsApp"
+                >
+                  💬
+                </a>
+                <a
+                  href="https://instagram.com"
+                  className="social-icon-btn"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram"
+                >
+                  <Camera size={17} />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  className="social-icon-btn"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                >
+                  <Globe size={17} />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  className="social-icon-btn"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Twitter"
+                >
+                  <MessageCircle size={17} />
+                </a>
               </div>
-              <div className="info-card">
-                <MapPin size={20} />
-                <div>
-                  <h4>Address</h4>
-                  <p>Nazimabad No. 123, Karachi, Pakistan</p>
-                </div>
-              </div>
-              <div className="info-card">
-                <Clock size={20} />
-                <div>
-                  <h4>Working Hours</h4>
-                  <p>
-                    Mon-Sat: 9AM - 8PM
-                    <br />
-                    Sunday: 10AM - 6PM
-                  </p>
-                </div>
+
+              {/* Map placeholder */}
+              <div className="map-placeholder">
+                <span className="map-pin-icon">📍</span>
+                <span className="map-label">Find Us Here</span>
+                <span className="map-sub">Nazimabad, Karachi</span>
               </div>
             </div>
 
-            <a
-              href="https://wa.me/923182255708"
-              className="whatsapp-btn"
-              target="_blank"
-              rel="noreferrer"
-            >
-              💬 Chat on WhatsApp
-            </a>
-          </div>
+            {/* RIGHT — form */}
+            <div className="contact-form-card">
+              {status === "success" ? (
+                <div className="success-state">
+                  <div className="success-icon-wrap">
+                    <CheckCircle size={40} color="#4ade80" />
+                  </div>
+                  <h2 className="success-heading">Message Sent!</h2>
+                  <p className="success-sub">
+                    Thank you for reaching out. We will get back to you within
+                    24 hours.
+                  </p>
+                  <button
+                    className="cta-btn"
+                    onClick={() => {
+                      setForm(EMPTY_FORM);
+                      setStatus("");
+                    }}
+                  >
+                    Send Another
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="contact-form" noValidate>
+                  <h2 className="form-heading">Send a Message</h2>
 
-          {/* RIGHT: Form */}
-          <div className="contact-form-wrapper">
-            {status === "success" ? (
-              <div className="success-state">
-                <div className="success-icon">✅</div>
-                <h2>Message Sent!</h2>
-                <p>We will get back to you within 24 hours.</p>
-                <button
-                  className="btn-primary"
-                  onClick={() =>
-                    setForm({
-                      name: "",
-                      email: "",
-                      phone: "",
-                      subject: "General Inquiry",
-                      message: "",
-                    })
-                  }
-                >
-                  Send Another
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="contact-form">
-                <h2>Send Us a Message</h2>
-                <div className="form-grid">
+                  {status === "error" && (
+                    <div className="form-error-banner">
+                      Failed to send message. Please try again.
+                    </div>
+                  )}
+
+                  <div className="form-grid-2col">
+                    <div className="form-group">
+                      <label htmlFor="cf-name">Full Name</label>
+                      <input
+                        id="cf-name"
+                        type="text"
+                        required
+                        value={form.name}
+                        placeholder="Your full name"
+                        onChange={(e) =>
+                          setForm({ ...form, name: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="cf-email">Email Address</label>
+                      <input
+                        id="cf-email"
+                        type="email"
+                        required
+                        value={form.email}
+                        placeholder="you@example.com"
+                        onChange={(e) =>
+                          setForm({ ...form, email: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="cf-phone">Phone Number</label>
+                      <input
+                        id="cf-phone"
+                        type="tel"
+                        value={form.phone}
+                        placeholder="+92 300 000 0000"
+                        onChange={(e) =>
+                          setForm({ ...form, phone: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="cf-subject">Subject</label>
+                      <div className="select-wrapper">
+                        <select
+                          id="cf-subject"
+                          value={form.subject}
+                          onChange={(e) =>
+                            setForm({ ...form, subject: e.target.value })
+                          }
+                        >
+                          <option>General Inquiry</option>
+                          <option>Hall Booking</option>
+                          <option>Pricing Info</option>
+                          <option>Complaint</option>
+                        </select>
+                        <ChevronDown
+                          size={15}
+                          className="select-chevron"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="form-group">
-                    <label>Full Name</label>
-                    <input
+                    <label htmlFor="cf-message">Message</label>
+                    <textarea
+                      id="cf-message"
+                      rows={5}
                       required
-                      value={form.name}
-                      label="Full Name"
-                      placeholder="Full Name"
+                      value={form.message}
+                      placeholder="Tell us about your event or question..."
                       onChange={(e) =>
-                        setForm({ ...form, name: e.target.value })
+                        setForm({ ...form, message: e.target.value })
                       }
                     />
                   </div>
-                  <div className="form-group">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      required
-                      value={form.email}
-                      label="Email"
-                      placeholder="Email"
-                      onChange={(e) =>
-                        setForm({ ...form, email: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Phone</label>
-                    <input
-                      type="tel"
-                      value={form.phone}
-                      label="Phone"
-                      placeholder="Phone"
-                      onChange={(e) =>
-                        setForm({ ...form, phone: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Subject</label>
-                    <select
-                      value={form.subject}
-                      placeholder="Subject"
-                      onChange={(e) =>
-                        setForm({ ...form, subject: e.target.value })
-                      }
-                    >
-                      <option>General Inquiry</option>
-                      <option>Hall Booking</option>
-                      <option>Pricing Info</option>
-                      <option>Complaint</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-group full">
-                  <label>Message</label>
-                  <textarea
-                    rows="5"
-                    required
-                    value={form.message}
-                    label="Message"
-                    placeholder="Your Message"
-                    onChange={(e) =>
-                      setForm({ ...form, message: e.target.value })
-                    }
-                  ></textarea>
-                </div>
-                <button type="submit" className="btn-primary">
-                  <Send size={16} /> Send Message
-                </button>
-              </form>
-            )}
+
+                  <button
+                    type="submit"
+                    className="cta-btn submit-btn"
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <span className="btn-spinner" />
+                    ) : (
+                      <Send size={16} />
+                    )}
+                    {submitting ? "Sending…" : "Send Message"}
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* FAQ */}
-        <div className="faq-section">
-          <p className="section-tag" style={{ textAlign: "center" }}>
-            ✦ FAQ
+      {/* ── FAQ ── */}
+      <section className="faq-section">
+        <div className="contact-container">
+          <div className="section-label-wrap">
+            <span className="section-tag-pill">✦ FAQ</span>
+          </div>
+          <h2 className="section-heading">Frequently Asked Questions</h2>
+          <p className="section-sub">
+            Everything you need to know about booking with Elegant Celebrations.
           </p>
-          <h2 className="section-title">Frequently Asked Questions</h2>
+
           <div className="faq-list">
             {FAQS.map((faq, i) => (
               <div
                 key={i}
-                className={`faq-item ${openFaq === i ? "open" : ""}`}
+                className={`faq-item${openFaq === i ? " open" : ""}`}
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
               >
                 <div className="faq-q">
-                  <span>{faq.q}</span>
-                  <ChevronDown size={20} className="faq-chevron" />
+                  <span className="faq-q-text">{faq.q}</span>
+                  <ChevronDown
+                    size={18}
+                    className="faq-chevron"
+                    aria-hidden="true"
+                  />
                 </div>
-                <div className="faq-a">{faq.a}</div>
+                <div className="faq-a">
+                  <p>{faq.a}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

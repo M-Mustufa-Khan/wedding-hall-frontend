@@ -1,129 +1,168 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
-  Menu,
-  X,
-  Calendar,
-  User,
-  Home,
-  Building2,
-  Package,
-  Images,
-  Info,
-  Mail,
-  Shield, // ✅ ADDED SHIELD ICON
+  Menu, X, Calendar, User, Home, Building2, Package,
+  Images, Info, Mail, Shield, LogOut, ChevronDown,
 } from "lucide-react";
 import "./Navbar.css";
 
 const NAV_LINKS = [
-  { to: "/", label: "Home", icon: <Home size={16} /> },
-  { to: "/halls", label: "Halls", icon: <Building2 size={16} /> },
-  { to: "/packages", label: "Packages", icon: <Package size={16} /> },
-  { to: "/gallery", label: "Gallery", icon: <Images size={16} /> },
-  { to: "/about", label: "About Us", icon: <Info size={16} /> },
-  { to: "/contact", label: "Contact", icon: <Mail size={16} /> },
+  { to: "/",        label: "Home",     icon: <Home size={16} />,     exact: true },
+  { to: "/halls",   label: "Halls",    icon: <Building2 size={16} /> },
+  { to: "/packages",label: "Packages", icon: <Package size={16} />   },
+  { to: "/gallery", label: "Gallery",  icon: <Images size={16} />    },
+  { to: "/about",   label: "About Us", icon: <Info size={16} />      },
+  { to: "/contact", label: "Contact",  icon: <Mail size={16} />      },
 ];
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const drawerRef = useRef(null);
-  const toggleRef = useRef(null);
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const [menuOpen,     setMenuOpen]     = useState(false);
+  const [scrolled,     setScrolled]     = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  /* ── scroll listener ── */
+  const drawerRef   = useRef(null);
+  const toggleRef   = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user") || "null"));
+
+  const isActive = (to, exact) =>
+    exact
+      ? location.pathname === to
+      : to !== "/" && location.pathname.startsWith(to);
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onAuth = () => setUser(JSON.parse(localStorage.getItem("user") || "null"));
+    window.addEventListener("auth-change", onAuth);
+    return () => window.removeEventListener("auth-change", onAuth);
   }, []);
 
-  /* ── close drawer on outside click ── */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   useEffect(() => {
     if (!menuOpen) return;
-    const handleClickOutside = (e) => {
+    const onOutside = (e) => {
       if (
-        drawerRef.current &&
-        !drawerRef.current.contains(e.target) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(e.target)
-      ) {
-        setMenuOpen(false);
-      }
+        drawerRef.current && !drawerRef.current.contains(e.target) &&
+        toggleRef.current && !toggleRef.current.contains(e.target)
+      ) setMenuOpen(false);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
   }, [menuOpen]);
 
-  /* ── lock body scroll when drawer is open ── */
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const onOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", onOutside);
+    return () => document.removeEventListener("mousedown", onOutside);
+  }, [dropdownOpen]);
+
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  /* ── close drawer on route change ── */
   const close = () => setMenuOpen(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    window.dispatchEvent(new Event("auth-change"));
     close();
+    setDropdownOpen(false);
     navigate("/");
-    window.location.reload();
   };
+
+  const initials = user?.fullName?.charAt(0)?.toUpperCase() || "U";
 
   return (
     <>
       <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <div className="nav-container">
+
           {/* ── Logo ── */}
           <Link to="/" className="nav-logo" onClick={close}>
-            <span className="logo-icon">💍</span>
-            <span className="logo-text">Elegant Celebrations</span>
+            <span className="logo-ring">💍</span>
+            <div className="logo-wordmark">
+              <span className="logo-elegant">Elegant</span>
+              <span className="logo-celebrations">Celebrations</span>
+            </div>
           </Link>
 
           {/* ── Desktop Links ── */}
-          <div className="nav-links">
-            {NAV_LINKS.map(({ to, label }) => (
-              <Link key={to} to={to}>
+          <nav className="nav-links">
+            {NAV_LINKS.map(({ to, label, exact }) => (
+              <Link
+                key={to}
+                to={to}
+                className={`nav-link ${isActive(to, exact) ? "active" : ""}`}
+              >
                 {label}
               </Link>
             ))}
-          </div>
+          </nav>
 
           {/* ── Desktop Actions ── */}
           <div className="nav-actions">
             {user ? (
               <>
-                <Link to="/my-bookings" className="nav-link-small">
-                  <Calendar size={15} /> My Bookings
-                </Link>
-                <Link to="/profile" className="nav-link-small">
-                  <User size={15} /> Profile
+                <Link to="/my-bookings" className="nav-ghost-btn">
+                  <Calendar size={15} />
+                  <span>My Bookings</span>
                 </Link>
 
-                {/* ✅ ADMIN LINK - Only visible to Admins */}
-                {user.role === "Admin" && (
-                  <Link to="/admin" className="nav-link-small admin-nav-link">
-                    <Shield size={15} /> Admin Panel
-                  </Link>
-                )}
+                {/* Avatar dropdown */}
+                <div className="nav-avatar-wrap" ref={dropdownRef}>
+                  <button
+                    className={`nav-avatar-btn ${dropdownOpen ? "open" : ""}`}
+                    onClick={() => setDropdownOpen((p) => !p)}
+                    aria-label="User menu"
+                  >
+                    <span className="nav-avatar-circle">{initials}</span>
+                    <ChevronDown size={13} className="avatar-chevron" />
+                  </button>
 
-                <button className="nav-btn logout-btn" onClick={handleLogout}>
-                  Logout
-                </button>
+                  <div className={`nav-dropdown ${dropdownOpen ? "open" : ""}`}>
+                    <div className="nav-dd-header">
+                      <div className="nav-dd-avatar">{initials}</div>
+                      <div>
+                        <div className="nav-dd-name">{user.fullName}</div>
+                        <div className="nav-dd-role">{user.role || "Member"}</div>
+                      </div>
+                    </div>
+                    <div className="nav-dd-divider" />
+                    <Link to="/profile" className="nav-dd-item" onClick={() => setDropdownOpen(false)}>
+                      <User size={15} /> My Profile
+                    </Link>
+                    <Link to="/my-bookings" className="nav-dd-item" onClick={() => setDropdownOpen(false)}>
+                      <Calendar size={15} /> My Bookings
+                    </Link>
+                    {user.role === "Admin" && (
+                      <Link to="/admin" className="nav-dd-item nav-dd-admin" onClick={() => setDropdownOpen(false)}>
+                        <Shield size={15} /> Admin Panel
+                      </Link>
+                    )}
+                    <div className="nav-dd-divider" />
+                    <button className="nav-dd-item nav-dd-logout" onClick={handleLogout}>
+                      <LogOut size={15} /> Logout
+                    </button>
+                  </div>
+                </div>
               </>
             ) : (
               <>
-                <Link to="/login" className="nav-btn">
-                  Login
-                </Link>
-                <Link to="/halls" className="nav-btn register-btn">
-                  Book Now
-                </Link>
+                <Link to="/login" className="nav-ghost-btn">Login</Link>
+                <Link to="/halls" className="nav-cta-btn">Book Now</Link>
               </>
             )}
           </div>
@@ -131,82 +170,91 @@ const Navbar = () => {
           {/* ── Hamburger ── */}
           <button
             ref={toggleRef}
-            className="nav-toggle"
-            onClick={() => setMenuOpen((prev) => !prev)}
+            className={`nav-toggle ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen((p) => !p)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            <span className="hamburger-bar" />
+            <span className="hamburger-bar" />
+            <span className="hamburger-bar" />
           </button>
         </div>
       </nav>
 
-      {/* ── Mobile Drawer (separate from navbar flow) ── */}
-      <div
+      {/* ── Backdrop ── */}
+      <div className={`drawer-backdrop ${menuOpen ? "open" : ""}`} onClick={close} />
+
+      {/* ── Mobile Drawer (right slide) ── */}
+      <aside
         ref={drawerRef}
         className={`mobile-drawer ${menuOpen ? "open" : ""}`}
         aria-hidden={!menuOpen}
       >
-        <div className="mobile-drawer-inner">
-          {/* Nav Links */}
-          <nav className="drawer-links">
-            {NAV_LINKS.map(({ to, label, icon }) => (
-              <Link key={to} to={to} onClick={close}>
-                {icon}
-                {label}
-              </Link>
-            ))}
-          </nav>
+        {/* Close button */}
+        <button className="drawer-close" onClick={close} aria-label="Close">
+          <X size={20} />
+        </button>
 
-          <div className="drawer-divider" />
-
-          {/* Auth Actions */}
-          <div className="drawer-actions">
-            {user ? (
-              <>
-                <Link
-                  to="/my-bookings"
-                  className="nav-link-small"
-                  onClick={close}
-                >
-                  <Calendar size={16} /> My Bookings
-                </Link>
-                <Link to="/profile" className="nav-link-small" onClick={close}>
-                  <User size={16} /> Profile
-                </Link>
-
-                {/* ✅ ADMIN LINK - Only visible to Admins on Mobile */}
-                {user.role === "Admin" && (
-                  <Link
-                    to="/admin"
-                    className="nav-link-small admin-nav-link"
-                    onClick={close}
-                  >
-                    <Shield size={16} /> Admin Panel
-                  </Link>
-                )}
-
-                <button className="nav-btn logout-btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="nav-btn" onClick={close}>
-                  Login
-                </Link>
-                <Link
-                  to="/halls"
-                  className="nav-btn register-btn"
-                  onClick={close}
-                >
-                  Book Now
-                </Link>
-              </>
-            )}
+        {/* User / Guest card */}
+        {user ? (
+          <div className="drawer-user-card">
+            <div className="drawer-user-avatar">{initials}</div>
+            <div className="drawer-user-info">
+              <span className="drawer-user-name">{user.fullName}</span>
+              <span className="drawer-user-role">{user.role || "Member"}</span>
+            </div>
           </div>
+        ) : (
+          <div className="drawer-guest-card">
+            <span className="drawer-guest-icon">💍</span>
+            <span className="drawer-guest-label">Elegant Celebrations</span>
+          </div>
+        )}
+
+        {/* Nav links */}
+        <nav className="drawer-nav">
+          {NAV_LINKS.map(({ to, label, icon, exact }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`drawer-link ${isActive(to, exact) ? "active" : ""}`}
+              onClick={close}
+            >
+              <span className="drawer-link-icon">{icon}</span>
+              <span>{label}</span>
+            </Link>
+          ))}
+        </nav>
+
+        <div className="drawer-sep" />
+
+        {/* Auth actions */}
+        <div className="drawer-auth">
+          {user ? (
+            <>
+              <Link to="/my-bookings" className="drawer-util-link" onClick={close}>
+                <Calendar size={15} /> My Bookings
+              </Link>
+              <Link to="/profile" className="drawer-util-link" onClick={close}>
+                <User size={15} /> My Profile
+              </Link>
+              {user.role === "Admin" && (
+                <Link to="/admin" className="drawer-util-link drawer-admin" onClick={close}>
+                  <Shield size={15} /> Admin Panel
+                </Link>
+              )}
+              <button className="drawer-logout" onClick={handleLogout}>
+                <LogOut size={15} /> Logout
+              </button>
+            </>
+          ) : (
+            <div className="drawer-cta-row">
+              <Link to="/login" className="drawer-login" onClick={close}>Login</Link>
+              <Link to="/halls" className="drawer-booknow" onClick={close}>Book Now</Link>
+            </div>
+          )}
         </div>
-      </div>
+      </aside>
     </>
   );
 };

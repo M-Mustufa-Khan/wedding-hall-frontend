@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#d4af37"/>
+      <stop offset="50%"  stop-color="#f4d03f"/>
+      <stop offset="100%" stop-color="#b8960c"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Ring band outer -->
+  <circle cx="32" cy="32" r="28" fill="none" stroke="url(#g)" stroke-width="7" filter="url(#glow)"/>
+  <!-- Ring band inner highlight -->
+  <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" stroke-dasharray="4 6" stroke-linecap="round"/>
+  <!-- Diamond gem on top -->
+  <polygon points="32,7 38,15 32,19 26,15" fill="url(#g)" filter="url(#glow)"/>
+  <polygon points="32,7 38,15 32,11" fill="rgba(255,255,255,0.45)"/>
+  <polygon points="32,19 38,15 32,11 26,15" fill="rgba(180,140,20,0.6)"/>
+</svg>

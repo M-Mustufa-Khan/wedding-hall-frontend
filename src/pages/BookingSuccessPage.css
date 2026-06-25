@@ -1,346 +1,688 @@
-/* ============================================
-   BOOKING SUCCESS PAGE — Complete Stylesheet
-   Wedding Hall Management System
-   Gold theme consistent with rest of app
-   ============================================ */
+/* ============================================================
+   BOOKING SUCCESS PAGE — Premium Dark-Gold Redesign
+   Elegant Celebrations · Design system v2
+   ============================================================ */
 
-/* ── Page Shell ── */
-.success-page {
-  padding-top: 70px;
+/* ── universal box-sizing ── */
+.bsp-page *,
+.bsp-page *::before,
+.bsp-page *::after {
+  box-sizing: border-box;
+}
+
+/* ── page shell ── */
+.bsp-page {
   min-height: 100vh;
-  background: #0a0a0a;
-  font-family:
-    "Segoe UI",
-    system-ui,
-    -apple-system,
-    sans-serif;
-  color: #e8e8e8;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.success-container {
-  max-width: 620px;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding: 60px 24px 80px;
-}
-
-/* ============================================
-   CHECKMARK ANIMATION
-   ============================================ */
-.success-animation {
-  color: #2ed573;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: center;
-  animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Glow ring behind checkmark */
-.success-animation svg {
-  filter: drop-shadow(0 0 24px rgba(46, 213, 115, 0.45));
-}
-
-/* ── Heading ── */
-.success-container h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #f5f5f5;
-  margin: 0 0 8px;
-  letter-spacing: -0.03em;
-}
-
-.success-container > p {
-  color: #777;
-  font-size: 0.95rem;
-  margin: 0 0 24px;
-}
-
-/* ============================================
-   BOOKING ID BOX
-   ============================================ */
-.booking-id-box {
-  background: rgba(201, 168, 76, 0.08);
-  border: 1.5px solid rgba(201, 168, 76, 0.4);
-  padding: 12px 28px;
-  border-radius: 10px;
-  display: inline-block;
-  margin: 0 0 36px;
-  color: #c9a84c;
-  font-weight: 800;
-  font-size: 1rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-/* ============================================
-   SUCCESS SUMMARY CARD
-   ============================================ */
-.success-summary {
-  background: #111;
-  border: 1px solid #1e1e1e;
-  border-radius: 16px;
-  padding: 24px 28px;
-  margin-bottom: 20px;
-  text-align: left;
+  padding-top: 72px;
+  background: #080808;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: #f0ece4;
   position: relative;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ============================================================
+   FLOATING GOLD PARTICLES
+   ============================================================ */
+.bsp-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
   overflow: hidden;
 }
 
-/* Gold top accent line */
-.success-summary::before {
+.bsp-particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: bspFloat linear infinite;
+}
+
+/* diamond variant */
+.bsp-particle--diamond {
+  border-radius: 2px;
+  transform-origin: center;
+  animation-name: bspFloatDiamond;
+}
+
+/* bar variant */
+.bsp-particle--bar {
+  border-radius: 2px;
+  width: 3px !important;
+  height: 10px !important;
+  animation-name: bspFloatBar;
+}
+
+@keyframes bspFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  10% {
+    opacity: 0.55;
+  }
+  85% {
+    opacity: 0.30;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(1.2) rotate(30deg);
+  }
+}
+
+@keyframes bspFloatDiamond {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(45deg) scale(0.5);
+  }
+  10% {
+    opacity: 0.50;
+  }
+  85% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-140px) rotate(225deg) scale(1.3);
+  }
+}
+
+@keyframes bspFloatBar {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  10% {
+    opacity: 0.45;
+  }
+  85% {
+    opacity: 0.20;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-160px) rotate(180deg);
+  }
+}
+
+/* ============================================================
+   CENTRE LAYOUT COLUMN
+   ============================================================ */
+.bsp-layout {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 580px;
+  padding: 56px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ============================================================
+   SUCCESS CARD
+   ============================================================ */
+.bsp-card {
+  width: 100%;
+  background: rgba(14, 14, 14, 0.97);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 24px;
+  padding: 48px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.60),
+    0 0 40px rgba(212, 175, 55, 0.05);
+  animation: bspCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes bspCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* gold top accent line on card */
+.bsp-card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #c9a84c, #e8c97a, #c9a84c);
+  background: linear-gradient(90deg, transparent, #d4af37, #f4d03f, #d4af37, transparent);
+  border-radius: 24px 24px 0 0;
 }
 
-.success-summary h3 {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 16px;
+/* ── subtle inner glow at bottom ── */
+.bsp-card::after {
+  content: "";
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 120px;
+  background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.07) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 0;
-  border-bottom: 1px solid #1a1a1a;
-  font-size: 0.88rem;
-}
-
-.summary-row:last-child {
-  border-bottom: none;
-}
-
-.summary-row span:first-child {
-  color: #777;
+/* ============================================================
+   ANIMATED CHECKMARK
+   ============================================================ */
+.bsp-check-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 28px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.summary-row span:last-child {
-  color: #e0e0e0;
-  font-weight: 600;
-  text-align: right;
+/* pulsing rings */
+.bsp-check-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(212, 175, 55, 0.35);
+  animation: bspRingPulse 2.4s ease-out infinite;
 }
 
-.summary-row.highlight span:last-child {
-  color: #c9a84c;
-  font-size: 1rem;
+.bsp-check-ring--inner {
+  inset: 8px;
+  border-color: rgba(212, 175, 55, 0.22);
+  animation-delay: 0.8s;
+}
+
+@keyframes bspRingPulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+/* circle behind the icon */
+.bsp-check-circle {
+  position: relative;
+  z-index: 2;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(244, 208, 63, 0.08));
+  border: 2px solid rgba(212, 175, 55, 0.40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4af37;
+  box-shadow:
+    0 0 28px rgba(212, 175, 55, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: bspCheckPop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s both;
+}
+
+@keyframes bspCheckPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.14);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bsp-check-circle svg {
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.50));
+}
+
+/* ============================================================
+   HEADING & SUBTEXT
+   ============================================================ */
+.bsp-heading {
+  font-size: clamp(1.7rem, 4vw, 2.2rem);
   font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  /* gold shimmer */
+  background: linear-gradient(90deg, #d4af37, #f4d03f, #d4af37);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: bspShimmer 3s linear infinite;
 }
 
-.summary-row.green span:last-child {
-  color: #2ed573;
-  font-weight: 700;
+@keyframes bspShimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
-.summary-row.orange span:last-child {
-  color: #ff9f43;
-  font-weight: 700;
-}
-
-/* ============================================
-   NEXT STEPS CARD
-   ============================================ */
-.next-steps {
-  background: #111;
-  border: 1px solid #1e1e1e;
-  border-radius: 16px;
-  padding: 24px 28px;
-  margin-bottom: 32px;
-  text-align: left;
-}
-
-.next-steps h3 {
-  color: #f0f0f0;
-  font-size: 1rem;
-  font-weight: 700;
+.bsp-subtext {
+  font-size: 0.95rem;
+  color: rgba(170, 165, 155, 0.70);
   margin: 0 0 20px;
 }
 
-/* Custom styled steps list */
-.next-steps ol {
+/* ============================================================
+   BOOKING ID PILL
+   ============================================================ */
+.bsp-id-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  background: rgba(212, 175, 55, 0.09);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  margin-bottom: 24px;
+  font-size: 0.8rem;
+  color: rgba(212, 175, 55, 0.75);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  word-break: break-all;
+}
+
+.bsp-id-pill svg {
+  flex-shrink: 0;
+  color: #d4af37;
+}
+
+.bsp-id-pill span {
+  font-weight: 600;
+}
+
+.bsp-id-pill strong {
+  color: #d4af37;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   GOLD DIVIDER
+   ============================================================ */
+.bsp-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.30), transparent);
+  margin-bottom: 28px;
+}
+
+/* ============================================================
+   BOOKING DETAILS GRID
+   ============================================================ */
+.bsp-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.bsp-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  gap: 12px;
+}
+
+.bsp-detail-row:last-child {
+  border-bottom: none;
+}
+
+/* slightly highlighted financial total row */
+.bsp-detail-row--gold {
+  background: rgba(212, 175, 55, 0.04);
+  margin: 0 -8px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.10);
+}
+
+.bsp-detail-row--status {
+  padding-top: 14px;
+  margin-top: 4px;
+}
+
+.bsp-detail-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(200, 195, 185, 0.55);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.bsp-detail-label svg {
+  color: rgba(212, 175, 55, 0.45);
+  flex-shrink: 0;
+}
+
+.bsp-detail-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f0ece4;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* colour variants */
+.bsp-val--gold {
+  color: #d4af37;
+  font-size: 1rem;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+}
+
+.bsp-val--green {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.bsp-val--amber {
+  color: #fb923c;
+  font-weight: 700;
+}
+
+/* ── status badge ── */
+.bsp-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  background: rgba(74, 222, 128, 0.10);
+  border: 1px solid rgba(74, 222, 128, 0.28);
+  color: #4ade80;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bsp-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.70);
+  animation: bspStatusPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes bspStatusPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* ============================================================
+   ACTION BUTTONS
+   ============================================================ */
+.bsp-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.bsp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 10px;
+  padding: 13px 22px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bsp-btn svg {
+  flex-shrink: 0;
+}
+
+/* CTA */
+.bsp-btn--cta {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #080808;
+  border: none;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.18);
+}
+
+.bsp-btn--cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+}
+
+/* Ghost */
+.bsp-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.30);
+  color: rgba(212, 175, 55, 0.85);
+}
+
+.bsp-btn--ghost:hover {
+  border-color: rgba(212, 175, 55, 0.65);
+  color: #f4d03f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.12);
+}
+
+/* ============================================================
+   WHAT'S NEXT SECTION
+   ============================================================ */
+.bsp-next {
+  width: 100%;
+  animation: bspCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+
+.bsp-next-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 800;
+  color: #f0ece4;
+  text-align: center;
+  margin: 0 0 24px;
+  letter-spacing: -0.01em;
+}
+
+.bsp-next-heading svg {
+  color: #d4af37;
+}
+
+/* after gold bar */
+.bsp-next-heading::after {
+  content: none; /* heading uses icon instead */
+}
+
+/* ── steps list ── */
+.bsp-steps {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.next-steps li {
+.bsp-step {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  color: #999;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  gap: 16px;
 }
 
-/* Number badge per step */
-.next-steps li::before {
-  content: counter(step);
-  counter-increment: step;
-  min-width: 26px;
-  height: 26px;
+.bsp-step-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: rgba(201, 168, 76, 0.12);
-  border: 1px solid rgba(201, 168, 76, 0.3);
-  color: #c9a84c;
-  font-size: 0.75rem;
+  background: rgba(212, 175, 55, 0.10);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  color: #d4af37;
+  font-size: 0.78rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
+  letter-spacing: 0;
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.10);
+  margin-top: 2px;
+}
+
+.bsp-step-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(14, 14, 14, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 16px 18px;
+  flex: 1;
+  transition: border-color 0.22s;
+}
+
+.bsp-step-body:hover {
+  border-color: rgba(212, 175, 55, 0.18);
+}
+
+.bsp-step-icon {
+  color: #d4af37;
   flex-shrink: 0;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
-.next-steps ol {
-  counter-reset: step;
-}
-
-/* ============================================
-   ACTION BUTTONS
-   ============================================ */
-.success-actions {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.success-actions .btn-primary {
-  background: linear-gradient(135deg, #c9a84c, #e8c97a);
-  color: #0d0d0d;
-  border: none;
-  border-radius: 10px;
-  padding: 13px 28px;
-  font-size: 0.95rem;
+.bsp-step-body strong {
+  display: block;
+  font-size: 0.88rem;
   font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition:
-    opacity 0.2s,
-    transform 0.15s,
-    box-shadow 0.2s;
-  letter-spacing: 0.02em;
+  color: #f0ece4;
+  margin-bottom: 4px;
 }
 
-.success-actions .btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(201, 168, 76, 0.35);
+.bsp-step-body p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(170, 165, 155, 0.65);
+  line-height: 1.55;
 }
 
-.success-actions .btn-secondary {
-  background: transparent;
-  color: #888;
-  border: 1.5px solid #2a2a2a;
-  border-radius: 10px;
-  padding: 12px 24px;
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
-}
-
-.success-actions .btn-secondary:hover {
-  border-color: #c9a84c;
-  color: #c9a84c;
-}
-
-/* ============================================
+/* ============================================================
    RESPONSIVE
-   ============================================ */
+   ============================================================ */
+@media (max-width: 900px) {
+  .bsp-layout {
+    max-width: 520px;
+  }
+}
+
 @media (max-width: 600px) {
-  .success-container {
-    padding: 40px 16px 60px;
+  .bsp-layout {
+    padding: 44px 14px 64px;
+    gap: 24px;
   }
 
-  .success-container h1 {
-    font-size: 1.6rem;
+  .bsp-card {
+    padding: 36px 22px 32px;
+    border-radius: 18px;
   }
 
-  .success-summary,
-  .next-steps {
-    padding: 20px 18px;
+  .bsp-check-wrap {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
   }
 
-  .success-actions {
+  .bsp-check-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .bsp-check-circle svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .bsp-actions {
     flex-direction: column;
   }
 
-  .success-actions .btn-primary,
-  .success-actions .btn-secondary {
+  .bsp-btn {
     width: 100%;
     justify-content: center;
   }
-}
-/* ============================================
-   MISSING STYLES
-   ============================================ */
 
-/* Summary row icons alignment */
-.summary-row span:first-child svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
+  .bsp-detail-label {
+    font-size: 0.67rem;
+  }
+
+  .bsp-detail-value {
+    font-size: 0.83rem;
+  }
 }
 
-/* Action buttons icon alignment */
-.success-actions .btn-primary svg,
-.success-actions .btn-secondary svg {
-  flex-shrink: 0;
-}
+@media (max-width: 480px) {
+  .bsp-card {
+    padding: 28px 16px 26px;
+  }
 
-/* Better box sizing */
-.success-page *,
-.success-page *::before,
-.success-page *::after {
-  box-sizing: border-box;
-}
+  .bsp-id-pill {
+    font-size: 0.72rem;
+    padding: 7px 14px;
+    text-align: center;
+    justify-content: center;
+  }
 
-/* Prevent long text overflow */
-.summary-row span:last-child {
-  word-break: break-word;
-}
+  .bsp-heading {
+    font-size: 1.55rem;
+  }
 
-/* Booking ID wrapping protection */
-.booking-id-box {
-  word-break: break-word;
+  .bsp-step-body {
+    padding: 12px 14px;
+  }
+
+  .bsp-step-num {
+    width: 28px;
+    height: 28px;
+    font-size: 0.72rem;
+  }
 }

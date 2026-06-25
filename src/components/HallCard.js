@@ -1,53 +1,59 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Users, Star } from "lucide-react";
+import { MapPin, Users, Star, ArrowRight } from "lucide-react";
 import "./HallCard.css";
 
-const HallCard = ({ hall, viewMode }) => {
-  return (
-    <Link
-      to={`/halls/${hall.hallID}`}
-      className={`hall-card ${viewMode === "list" ? "list-mode" : ""}`}
-    >
-      <div className="hall-card-image">
-        <img
-          src={
-            hall.imageURL ||
-            "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600"
-          }
-          alt={hall.name}
-          onError={(e) => {
-            e.target.src =
-              "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600";
-          }}
-        />
-        <div className="hall-card-badge">{hall.location}</div>
+const HallCard = ({ hall, viewMode }) => (
+  <Link
+    to={`/halls/${hall.hallID}`}
+    className={`hall-card ${viewMode === "list" ? "list-mode" : ""}`}
+  >
+    <div className="hc-img-wrap">
+      <img
+        src={hall.imageURL || "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600"}
+        alt={hall.name}
+        onError={(e) => {
+          e.target.src = "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600";
+        }}
+      />
+      <div className="hc-img-overlay" aria-hidden="true" />
+
+      <span className="hc-location-badge">
+        <MapPin size={11} /> {hall.location}
+      </span>
+
+      <div className="hc-view-hint">
+        View Hall <ArrowRight size={14} />
       </div>
-      <div className="hall-card-content">
-        <h3>{hall.name}</h3>
-        <div className="hall-meta">
-          <span>
-            <MapPin size={14} /> {hall.location}
-          </span>
-          <span>
-            <Users size={14} /> Up to {hall.capacity}
-          </span>
+    </div>
+
+    <div className="hc-body">
+      <h3 className="hc-name">{hall.name}</h3>
+
+      <div className="hc-meta">
+        <span className="hc-meta-item">
+          <Users size={13} /> Up to {hall.capacity?.toLocaleString()} guests
+        </span>
+      </div>
+
+      <p className="hc-desc">
+        {hall.description?.length > 80
+          ? `${hall.description.substring(0, 80)}…`
+          : hall.description}
+      </p>
+
+      <div className="hc-footer">
+        <div className="hc-rating">
+          <Star size={13} fill="#d4af37" stroke="#d4af37" />
+          <span>4.8</span>
         </div>
-        <p className="hall-card-desc">
-          {hall.description?.substring(0, 60)}...
-        </p>
-        <div className="hall-card-footer">
-          <div className="hall-rating">
-            <Star size={14} fill="#ff6b6b" stroke="#ff6b6b" /> 4.8
-          </div>
-          <span className="hall-price">
-            Rs {hall.pricePerDay?.toLocaleString()}
-            <span>/day</span>
-          </span>
+        <div className="hc-price">
+          <span className="hc-price-amount">Rs {hall.pricePerDay?.toLocaleString()}</span>
+          <span className="hc-price-unit">/day</span>
         </div>
       </div>
-    </Link>
-  );
-};
+    </div>
+  </Link>
+);
 
 export default HallCard;

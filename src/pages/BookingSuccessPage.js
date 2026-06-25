@@ -33,6 +33,8 @@ const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
 
 /* ---------- component ---------- */
 const BookingSuccessPage = () => {
+  useEffect(() => { document.title = "Booking Confirmed — Elegant Celebrations"; }, []);
+
   const location = useLocation();
   const navigate = useNavigate();
   const booking = location.state?.booking;

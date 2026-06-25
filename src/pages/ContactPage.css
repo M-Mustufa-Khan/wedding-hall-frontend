@@ -37,7 +37,7 @@
 /* ============================================================
    HERO
    ============================================================ */
-.page-hero.contact-hero-section {
+.contact-page-hero {
   position: relative;
   height: 320px;
   display: flex;
@@ -46,7 +46,7 @@
   overflow: hidden;
 }
 
-.hero-bg {
+.contact-hero-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -55,7 +55,7 @@
   will-change: transform;
 }
 
-.hero-overlay {
+.contact-hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
@@ -66,7 +66,7 @@
   );
 }
 
-.hero-inner {
+.contact-hero-inner {
   position: relative;
   z-index: 3;
   text-align: center;
@@ -77,7 +77,7 @@
   animation: fadeUp 0.7s ease both;
 }
 
-.hero-tag {
+.contact-hero-tag {
   padding: 5px 16px;
   border-radius: 50px;
   background: rgba(212, 175, 55, 0.12);
@@ -89,7 +89,7 @@
   text-transform: uppercase;
 }
 
-.hero-h1 {
+.contact-hero-h1 {
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 800;
   color: #fff;
@@ -98,14 +98,14 @@
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
-.hero-sub {
+.contact-hero-sub {
   font-size: 1rem;
   color: rgba(240, 236, 228, 0.65);
   margin: 0;
   max-width: 480px;
 }
 
-.hero-breadcrumb {
+.contact-hero-breadcrumb {
   font-size: 0.8rem;
   color: rgba(200, 195, 185, 0.55);
   display: flex;
@@ -273,30 +273,23 @@ a.info-value:hover {
   background: rgba(37, 211, 102, 0.07);
 }
 
-/* Map placeholder */
-.map-placeholder {
+/* Map embed */
+.map-embed {
   border-radius: 16px;
-  border: 1px solid rgba(212, 175, 55, 0.14);
-  background: rgba(14, 14, 14, 0.95);
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  overflow: hidden;
+  height: 200px;
   margin-top: 4px;
+  background: rgba(14, 14, 14, 0.95);
 }
 
-.map-pin-icon {
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.map-label {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: rgba(212, 175, 55, 0.85);
-  letter-spacing: 0.04em;
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 16px;
+  filter: grayscale(30%) brightness(0.9);
 }
 
 .map-sub {
@@ -548,7 +541,7 @@ a.info-value:hover {
   margin-bottom: 14px;
 }
 
-.section-tag-pill {
+.contact-section-tag-pill {
   padding: 5px 16px;
   border-radius: 50px;
   background: rgba(212, 175, 55, 0.10);
@@ -580,7 +573,7 @@ a.info-value:hover {
   margin: 12px auto 0;
 }
 
-.section-sub {
+.contact-section-sub {
   text-align: center;
   color: rgba(170, 165, 155, 0.70);
   font-size: 1rem;
@@ -713,8 +706,8 @@ a.info-value:hover {
     margin-bottom: 22px;
   }
 
-  .map-placeholder {
-    height: 130px;
+  .map-embed {
+    height: 160px;
   }
 }
 
@@ -726,7 +719,7 @@ a.info-value:hover {
     padding: 0 16px;
   }
 
-  .hero-h1 {
+  .contact-hero-h1 {
     font-size: 1.9rem;
   }
 

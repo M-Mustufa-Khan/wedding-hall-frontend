@@ -30,7 +30,7 @@
 /* ══════════════════════════════════
    HERO
 ══════════════════════════════════ */
-.page-hero {
+.pkg-page-hero {
   position: relative;
   height: 340px;
   display: flex;
@@ -39,7 +39,7 @@
   overflow: hidden;
 }
 
-.hero-bg {
+.pkg-hero-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -47,7 +47,7 @@
   animation: heroZoom 14s ease-in-out infinite alternate;
 }
 
-.hero-overlay {
+.pkg-hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
@@ -58,7 +58,7 @@
   );
 }
 
-.hero-inner {
+.pkg-hero-inner {
   position: relative;
   z-index: 3;
   text-align: center;
@@ -69,7 +69,7 @@
   animation: fadeUp 0.7s ease both;
 }
 
-.hero-tag {
+.pkg-hero-tag {
   padding: 5px 16px;
   border-radius: 50px;
   background: rgba(212, 175, 55, 0.12);
@@ -81,7 +81,7 @@
   text-transform: uppercase;
 }
 
-.hero-h1 {
+.pkg-hero-h1 {
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 800;
   color: #fff;
@@ -90,14 +90,14 @@
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.50);
 }
 
-.hero-sub {
+.pkg-hero-sub {
   font-size: 1rem;
   color: rgba(240, 236, 228, 0.65);
   margin: 0;
   max-width: 480px;
 }
 
-.hero-breadcrumb {
+.pkg-hero-breadcrumb {
   font-size: 0.8rem;
   color: rgba(200, 195, 185, 0.55);
   display: flex;
@@ -108,7 +108,7 @@
   margin: 0;
 }
 
-.hero-breadcrumb a {
+.pkg-hero-breadcrumb a {
   color: rgba(200, 195, 185, 0.55);
   text-decoration: none;
   display: flex;
@@ -117,11 +117,11 @@
   transition: color 0.2s;
 }
 
-.hero-breadcrumb a:hover {
+.pkg-hero-breadcrumb a:hover {
   color: #d4af37;
 }
 
-.hero-breadcrumb span {
+.pkg-hero-breadcrumb span {
   color: rgba(212, 175, 55, 0.75);
 }
 
@@ -178,7 +178,7 @@
   margin-bottom: 52px;
 }
 
-.section-tag-pill {
+.pkg-section-tag-pill {
   display: inline-block;
   padding: 5px 16px;
   border-radius: 50px;
@@ -210,7 +210,7 @@
   margin: 12px auto 0;
 }
 
-.section-sub {
+.pkg-section-sub {
   text-align: center;
   color: rgba(170, 165, 155, 0.70);
   font-size: 1rem;
@@ -716,11 +716,11 @@
 }
 
 @media (max-width: 600px) {
-  .page-hero {
+  .pkg-page-hero {
     height: 300px;
   }
 
-  .hero-h1 {
+  .pkg-hero-h1 {
     font-size: 1.8rem;
   }
 

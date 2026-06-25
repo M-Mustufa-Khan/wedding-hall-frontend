@@ -852,7 +852,7 @@
 /* ─────────────────────────────────────────────
    LIGHTBOX MODAL
    ───────────────────────────────────────────── */
-.lightbox-overlay {
+.hd-lightbox-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.96);

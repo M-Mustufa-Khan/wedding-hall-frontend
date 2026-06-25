@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Phone,
   Mail,
@@ -46,6 +46,8 @@ const EMPTY_FORM = {
 };
 
 const ContactPage = () => {
+  useEffect(() => { document.title = "Contact Us — Elegant Celebrations"; }, []);
+
   const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState(""); // "" | "success" | "error"
   const [submitting, setSubmitting] = useState(false);
@@ -74,23 +76,23 @@ const ContactPage = () => {
   return (
     <div className="contact-page">
       {/* ── HERO ── */}
-      <section className="page-hero contact-hero-section">
+      <section className="contact-page-hero">
         <div
-          className="hero-bg"
+          className="contact-hero-bg"
           aria-hidden="true"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1600')",
           }}
         />
-        <div className="hero-overlay" aria-hidden="true" />
-        <div className="hero-inner">
-          <span className="hero-tag">✦ Contact</span>
-          <h1 className="hero-h1">Get In Touch</h1>
-          <p className="hero-sub">
+        <div className="contact-hero-overlay" aria-hidden="true" />
+        <div className="contact-hero-inner">
+          <span className="contact-hero-tag">✦ Contact</span>
+          <h1 className="contact-hero-h1">Get In Touch</h1>
+          <p className="contact-hero-sub">
             We're here to help plan your perfect celebration
           </p>
-          <nav className="hero-breadcrumb" aria-label="breadcrumb">
+          <nav className="contact-hero-breadcrumb" aria-label="breadcrumb">
             <span>Home</span>
             <span className="bc-sep">›</span>
             <span className="bc-current">Contact</span>
@@ -205,11 +207,18 @@ const ContactPage = () => {
                 </a>
               </div>
 
-              {/* Map placeholder */}
-              <div className="map-placeholder">
-                <span className="map-pin-icon">📍</span>
-                <span className="map-label">Find Us Here</span>
-                <span className="map-sub">Nazimabad, Karachi</span>
+              {/* Google Maps embed */}
+              <div className="map-embed">
+                <iframe
+                  title="Elegant Celebrations Location"
+                  src="https://maps.google.com/maps?q=Nazimabad+Karachi+Pakistan&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </div>
 
@@ -348,10 +357,10 @@ const ContactPage = () => {
       <section className="faq-section">
         <div className="contact-container">
           <div className="section-label-wrap">
-            <span className="section-tag-pill">✦ FAQ</span>
+            <span className="contact-section-tag-pill">✦ FAQ</span>
           </div>
           <h2 className="section-heading">Frequently Asked Questions</h2>
-          <p className="section-sub">
+          <p className="contact-section-sub">
             Everything you need to know about booking with Elegant Celebrations.
           </p>
 

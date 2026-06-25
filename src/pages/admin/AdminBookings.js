@@ -14,6 +14,8 @@ const STATUS_FILTERS = ["All", "Pending", "Confirmed", "Cancelled"];
 const PAGE_SIZE = 10;
 
 const AdminBookings = () => {
+  useEffect(() => { document.title = "Bookings — Admin | Elegant Celebrations"; }, []);
+
   const [bookings, setBookings] = useState([]);
   const [halls, setHalls] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -21,7 +23,7 @@ const AdminBookings = () => {
   const [error, setError] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [showAll, setShowAll] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     loadData();
@@ -36,7 +38,7 @@ const AdminBookings = () => {
         getHalls(),
       ]);
       if (bookingsRes.status === "fulfilled") {
-        setBookings((bookingsRes.value?.data || []).slice().reverse());
+        setBookings(bookingsRes.value?.data || []);
       } else {
         setError("Could not load bookings. Please check your connection.");
         setBookings([]);
@@ -84,12 +86,17 @@ const AdminBookings = () => {
     return "#" + String(id).padStart(4, "0").toUpperCase();
   };
 
+  const isNew = (createdAt) => {
+    if (!createdAt) return false;
+    return Date.now() - new Date(createdAt).getTime() < 24 * 60 * 60 * 1000;
+  };
+
   const handleStatusUpdate = async (id, status) => {
     setUpdatingId(id);
     try {
       await updateBookingStatus(id, status);
       const res = await getBookings();
-      const fresh = (res.data || []).slice().reverse();
+      const fresh = res.data || [];
       setBookings(fresh);
       if (selectedBooking?.bookingID === id) {
         const updated = fresh.find((b) => b.bookingID === id);
@@ -109,9 +116,9 @@ const AdminBookings = () => {
           (b) => (b.status || "").toLowerCase() === statusFilter.toLowerCase()
         );
 
-  const visibleBookings = showAll
-    ? filteredBookings
-    : filteredBookings.slice(0, PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(filteredBookings.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const visibleBookings = filteredBookings.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const countFor = (f) =>
     bookings.filter(
@@ -157,7 +164,7 @@ const AdminBookings = () => {
             className={`ab-pill${statusFilter === f ? " ab-pill--active" : ""}`}
             onClick={() => {
               setStatusFilter(f);
-              setShowAll(false);
+              setPage(1);
             }}
           >
             {f}
@@ -180,8 +187,8 @@ const AdminBookings = () => {
                 <th>Booking ID</th>
                 <th>Customer</th>
                 <th>Hall</th>
+                <th>Booked On</th>
                 <th>Event Date</th>
-                <th>Guests</th>
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -221,14 +228,17 @@ const AdminBookings = () => {
                 </tr>
               ) : (
                 visibleBookings.map((b) => (
-                  <tr key={b.bookingID} className="ab-table-row">
+                  <tr key={b.bookingID} className={`ab-table-row${isNew(b.createdAt) ? " ab-row--new" : ""}`}>
                     <td>
-                      <span className="ab-booking-id">{shortId(b.bookingID)}</span>
+                      <div className="ab-id-cell">
+                        <span className="ab-booking-id">{shortId(b.bookingID)}</span>
+                        {isNew(b.createdAt) && <span className="ab-new-tag">NEW</span>}
+                      </div>
                     </td>
                     <td className="ab-td-name">{b.user?.fullName || "—"}</td>
                     <td>{getHallName(b)}</td>
+                    <td className="ab-td-date">{formatDate(b.createdAt)}</td>
                     <td>{formatDate(b.eventDate)}</td>
-                    <td>{b.guestCount || "—"}</td>
                     <td>{formatAmount(b.totalPrice ?? b.totalAmount)}</td>
                     <td>
                       <span className={`ab-badge ab-badge--${(b.status || "").toLowerCase()}`}>
@@ -278,14 +288,33 @@ const AdminBookings = () => {
           </table>
         </div>
 
-        {/* SHOW MORE */}
-        {!loading && filteredBookings.length > PAGE_SIZE && !showAll && (
-          <div className="ab-show-more-wrap">
+        {/* PAGINATION */}
+        {!loading && totalPages > 1 && (
+          <div className="ab-pagination">
             <button
-              className="ab-show-more-btn"
-              onClick={() => setShowAll(true)}
+              className="ab-page-btn"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={safePage === 1}
             >
-              Show all {filteredBookings.length} bookings
+              ‹ Prev
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                className={`ab-page-btn${safePage === p ? " ab-page-btn--active" : ""}`}
+                onClick={() => setPage(p)}
+              >
+                {p}
+              </button>
+            ))}
+
+            <button
+              className="ab-page-btn"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage === totalPages}
+            >
+              Next ›
             </button>
           </div>
         )}

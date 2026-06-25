@@ -5,17 +5,19 @@ import {
   Building2,
   CalendarCheck,
   MessageSquare,
+  Images,
   LogOut,
   Menu,
   X,
   Lock,
 } from "lucide-react";
-import { getContacts } from "../services/api";
+import { getContacts, getBookings } from "../services/api";
 import "./AdminLayout.css";
 
 const AdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadMsgs, setUnreadMsgs] = useState(0);
+  const [pendingBookings, setPendingBookings] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -23,6 +25,9 @@ const AdminLayout = ({ children }) => {
   useEffect(() => {
     getContacts()
       .then((res) => setUnreadMsgs((res.data || []).filter((c) => !c.isRead).length))
+      .catch(() => {});
+    getBookings()
+      .then((res) => setPendingBookings((res.data || []).filter((b) => b.status === "Pending").length))
       .catch(() => {});
   }, [location.pathname]); // re-check when navigating between admin pages
 
@@ -46,8 +51,9 @@ const AdminLayout = ({ children }) => {
   const menuItems = [
     { path: "/admin",          icon: <LayoutDashboard size={20} />, label: "Dashboard" },
     { path: "/admin/halls",    icon: <Building2 size={20} />,       label: "Manage Halls" },
-    { path: "/admin/bookings", icon: <CalendarCheck size={20} />,   label: "Bookings" },
+    { path: "/admin/bookings", icon: <CalendarCheck size={20} />,   label: "Bookings", badge: pendingBookings },
     { path: "/admin/contacts", icon: <MessageSquare size={20} />,   label: "Messages", badge: unreadMsgs },
+    { path: "/admin/gallery",  icon: <Images size={20} />,          label: "Gallery" },
   ];
 
   const currentLabel = menuItems.find((m) => m.path === location.pathname)?.label || "Dashboard";

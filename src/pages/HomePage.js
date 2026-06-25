@@ -74,6 +74,8 @@ const WHY_CARDS = [
 /* ================================================================== */
 
 const HomePage = () => {
+  useEffect(() => { document.title = "Elegant Celebrations — Premium Wedding Halls in Pakistan"; }, []);
+
   const [halls, setHalls]             = useState([]);
   const [loadingHalls, setLoadingHalls] = useState(true);
   const [searchLoc, setSearchLoc]     = useState("");
@@ -111,8 +113,8 @@ const HomePage = () => {
 
       {/* ══════════════ HERO ══════════════ */}
       <section className="hero">
-        <div className="hero-bg" aria-hidden="true" />
-        <div className="hero-overlay" aria-hidden="true" />
+        <div className="home-hero-bg" aria-hidden="true" />
+        <div className="home-hero-overlay" aria-hidden="true" />
         <div className="hero-glow"   aria-hidden="true" />
 
         <div className="hero-content">
@@ -127,8 +129,15 @@ const HomePage = () => {
             <span className="hero-heading-gold">Begins Here</span>
           </h1>
 
-          <p className="hero-sub">
-            Discover luxury halls crafted for your most precious celebration
+          <div className="hero-ornament" aria-hidden="true">
+            <span className="hero-ornament-line" />
+            <span className="hero-ornament-gem">✦</span>
+            <span className="hero-ornament-line hero-ornament-line--right" />
+          </div>
+
+          <p className="home-hero-sub">
+            Pakistan's most trusted platform for discovering and booking
+            luxury wedding halls across the country
           </p>
 
           <div className="hero-actions">
@@ -199,7 +208,7 @@ const HomePage = () => {
             <span className="section-tag">Hand-Picked For You</span>
             <div className="section-tag-line" aria-hidden="true" />
           </div>
-          <h2 className="section-title">Our Premium Halls</h2>
+          <h2 className="home-section-title">Our Premium Halls</h2>
           <p className="section-subtitle">Discover stunning venues tailored for every celebration</p>
 
           <div className="halls-grid">
@@ -238,7 +247,7 @@ const HomePage = () => {
             <span className="section-tag">Simple Process</span>
             <div className="section-tag-line" aria-hidden="true" />
           </div>
-          <h2 className="section-title">How It Works</h2>
+          <h2 className="home-section-title">How It Works</h2>
           <p className="section-subtitle">Book your dream hall in three easy steps</p>
 
           <div className="steps-grid">
@@ -267,7 +276,7 @@ const HomePage = () => {
             <span className="section-tag">Why Us</span>
             <div className="section-tag-line" aria-hidden="true" />
           </div>
-          <h2 className="section-title">Why Choose Elegant Celebrations</h2>
+          <h2 className="home-section-title">Why Choose Elegant Celebrations</h2>
           <p className="section-subtitle">Everything you need for a perfect celebration — under one roof</p>
 
           <div className="why-grid">
@@ -291,7 +300,7 @@ const HomePage = () => {
             <span className="section-tag">Our Venues</span>
             <div className="section-tag-line" aria-hidden="true" />
           </div>
-          <h2 className="section-title">A Glimpse of Elegance</h2>
+          <h2 className="home-section-title">A Glimpse of Elegance</h2>
           <p className="section-subtitle">Every corner designed to create lasting memories</p>
         </div>
 
@@ -339,7 +348,7 @@ const HomePage = () => {
             <span className="section-tag">Happy Couples</span>
             <div className="section-tag-line" aria-hidden="true" />
           </div>
-          <h2 className="section-title">What Our Clients Say</h2>
+          <h2 className="home-section-title">What Our Clients Say</h2>
           <p className="section-subtitle">Thousands of couples trusted us with their special day</p>
         </div>
 

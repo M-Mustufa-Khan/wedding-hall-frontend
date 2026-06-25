@@ -220,6 +220,37 @@
   border-bottom: none;
 }
 
+/* NEW row highlight */
+.ab-row--new td {
+  background: rgba(212, 175, 55, 0.03);
+}
+
+.ab-id-cell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ab-new-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.30);
+  color: #4caf50;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ab-td-date {
+  color: rgba(170, 165, 155, 0.60) !important;
+  font-size: 0.8rem !important;
+}
+
 /* Booking ID — monospace */
 .ab-booking-id {
   font-family: "Courier New", Courier, monospace;
@@ -401,35 +432,50 @@
   color: rgba(120, 115, 105, 0.70);
 }
 
-/* ── SHOW MORE BUTTON ── */
-.ab-show-more-wrap {
+/* ── PAGINATION ── */
+.ab-pagination {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 6px;
   padding: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
+  flex-wrap: wrap;
 }
 
-.ab-show-more-btn {
+.ab-page-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 28px;
-  border-radius: 50px;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
   background: transparent;
-  border: 1px solid rgba(212, 175, 55, 0.28);
-  color: #d4af37;
-  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(240, 236, 228, 0.65);
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  letter-spacing: 0.03em;
-  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
 }
 
-.ab-show-more-btn:hover {
+.ab-page-btn:hover:not(:disabled) {
   background: rgba(212, 175, 55, 0.08);
-  border-color: rgba(212, 175, 55, 0.50);
-  transform: translateY(-1px);
+  border-color: rgba(212, 175, 55, 0.40);
+  color: #d4af37;
+}
+
+.ab-page-btn--active {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #d4af37;
+}
+
+.ab-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 /* ── MODAL OVERLAY ── */

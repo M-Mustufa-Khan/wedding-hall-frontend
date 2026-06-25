@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Check,
@@ -175,29 +175,31 @@ const Cell = ({ val }) => {
 };
 
 const PackagesPage = () => {
+  useEffect(() => { document.title = "Packages & Pricing — Elegant Celebrations"; }, []);
+
   const [billing, setBilling] = useState("event");
 
   return (
     <div className="packages-page">
       {/* ── Hero ── */}
-      <section className="page-hero">
+      <section className="pkg-page-hero">
         <div
-          className="hero-bg"
+          className="pkg-hero-bg"
           aria-hidden="true"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1600&q=80')",
           }}
         />
-        <div className="hero-overlay" aria-hidden="true" />
-        <div className="hero-inner">
-          <span className="hero-tag">✦ Our Packages</span>
-          <h1 className="hero-h1">Choose Your Perfect Package</h1>
-          <p className="hero-sub">
+        <div className="pkg-hero-overlay" aria-hidden="true" />
+        <div className="pkg-hero-inner">
+          <span className="pkg-hero-tag">✦ Our Packages</span>
+          <h1 className="pkg-hero-h1">Choose Your Perfect Package</h1>
+          <p className="pkg-hero-sub">
             Transparent pricing crafted for every celebration — from intimate
             gatherings to grand affairs.
           </p>
-          <nav className="hero-breadcrumb" aria-label="Breadcrumb">
+          <nav className="pkg-hero-breadcrumb" aria-label="Breadcrumb">
             <Link to="/">
               <Home size={13} />
               Home
@@ -231,7 +233,7 @@ const PackagesPage = () => {
         <div className="pkg-container">
           <div className="section-heading-block">
             <h2 className="section-heading">Our Pricing Plans</h2>
-            <p className="section-sub">
+            <p className="pkg-section-sub">
               Every package is designed to deliver an unforgettable experience
               for your special day.
             </p>
@@ -314,9 +316,9 @@ const PackagesPage = () => {
       <section className="addons-section">
         <div className="pkg-container">
           <div className="section-heading-block">
-            <span className="section-tag-pill">✦ Extras</span>
+            <span className="pkg-section-tag-pill">✦ Extras</span>
             <h2 className="section-heading">Optional Add-Ons</h2>
-            <p className="section-sub">
+            <p className="pkg-section-sub">
               Enhance your celebration with these premium services — mix and
               match to create your dream event.
             </p>
@@ -346,9 +348,9 @@ const PackagesPage = () => {
       <section className="compare-section">
         <div className="pkg-container">
           <div className="section-heading-block">
-            <span className="section-tag-pill">✦ Compare</span>
+            <span className="pkg-section-tag-pill">✦ Compare</span>
             <h2 className="section-heading">Package Comparison</h2>
-            <p className="section-sub">
+            <p className="pkg-section-sub">
               See exactly what's included in each plan side by side.
             </p>
           </div>

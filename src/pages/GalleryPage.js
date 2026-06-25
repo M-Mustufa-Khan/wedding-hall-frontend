@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { X, ChevronLeft, ChevronRight, ZoomIn, Home, ChevronRight as Chevron } from "lucide-react";
+import { getGalleryImages } from "../services/api";
 import "./GalleryPage.css";
 
 const CATEGORIES = [
@@ -11,88 +12,31 @@ const CATEGORIES = [
   "Bridal Room",
 ];
 
-const IMAGES = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800",
-    cat: "Ceremony Halls",
-    hall: "Grand Royal Hall",
-  },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800",
-    cat: "Outdoor",
-    hall: "Pearl Garden",
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1478146059778-26028b07395a?w=800",
-    cat: "Reception",
-    hall: "Diamond Palace",
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800",
-    cat: "Decoration",
-    hall: "Golden Arena",
-  },
-  {
-    id: 5,
-    src: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800",
-    cat: "Ceremony Halls",
-    hall: "Silver Court",
-  },
-  {
-    id: 6,
-    src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
-    cat: "Bridal Room",
-    hall: "Rose Marquee",
-  },
-  {
-    id: 7,
-    src: "https://images.unsplash.com/photo-1510076857177-7470076d4098?w=800",
-    cat: "Reception",
-    hall: "Grand Royal Hall",
-  },
-  {
-    id: 8,
-    src: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800",
-    cat: "Outdoor",
-    hall: "Pearl Garden",
-  },
-  {
-    id: 9,
-    src: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=800",
-    cat: "Decoration",
-    hall: "Diamond Palace",
-  },
-  {
-    id: 10,
-    src: "https://images.unsplash.com/photo-1522413452208-996ff3f3e740?w=800",
-    cat: "Ceremony Halls",
-    hall: "Golden Arena",
-  },
-  {
-    id: 11,
-    src: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800",
-    cat: "Bridal Room",
-    hall: "Silver Court",
-  },
-  {
-    id: 12,
-    src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800",
-    cat: "Reception",
-    hall: "Rose Marquee",
-  },
-];
-
 const FALLBACK =
   "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800";
 
 const GalleryPage = () => {
+  useEffect(() => { document.title = "Gallery — Elegant Celebrations"; }, []);
+
+  const [allImages, setAllImages] = useState([]);
+  const [loadingImages, setLoadingImages] = useState(true);
   const [active, setActive] = useState("All");
   const [lightbox, setLightbox] = useState({ open: false, index: 0 });
   const [visible, setVisible] = useState(8);
+
+  useEffect(() => {
+    getGalleryImages()
+      .then((res) => setAllImages(res.data || []))
+      .catch(() => {})
+      .finally(() => setLoadingImages(false));
+  }, []);
+
+  const IMAGES = allImages.map((img) => ({
+    id: img.id,
+    src: img.imageBase64,
+    cat: img.category,
+    hall: img.caption || img.category,
+  }));
 
   const filtered =
     active === "All" ? IMAGES : IMAGES.filter((img) => img.cat === active);
@@ -144,23 +88,23 @@ const GalleryPage = () => {
   return (
     <div className="gallery-page">
       {/* ── Hero ── */}
-      <section className="page-hero gallery-hero-section">
+      <section className="gallery-page-hero gallery-hero-section">
         <div
-          className="hero-bg"
+          className="gallery-hero-bg"
           aria-hidden="true"
           style={{
             backgroundImage:
               "url(https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1600)",
           }}
         />
-        <div className="hero-overlay" aria-hidden="true" />
-        <div className="hero-inner">
-          <span className="hero-tag">✦ Gallery</span>
-          <h1 className="hero-h1">Our Gallery</h1>
-          <p className="hero-sub">
+        <div className="gallery-hero-overlay" aria-hidden="true" />
+        <div className="gallery-hero-inner">
+          <span className="gallery-hero-tag">✦ Gallery</span>
+          <h1 className="gallery-hero-h1">Our Gallery</h1>
+          <p className="gallery-hero-sub">
             Explore breathtaking moments captured across our stunning venues
           </p>
-          <nav className="hero-breadcrumb" aria-label="Breadcrumb">
+          <nav className="gallery-hero-breadcrumb" aria-label="Breadcrumb">
             <Home size={13} />
             <span>Home</span>
             <Chevron size={12} />
@@ -199,7 +143,13 @@ const GalleryPage = () => {
           </div>
 
           {/* ── Gallery Grid ── */}
-          {shown.length > 0 ? (
+          {loadingImages ? (
+            <div className="gallery-grid">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="gallery-item gallery-skeleton" />
+              ))}
+            </div>
+          ) : shown.length > 0 ? (
             <div className="gallery-grid">
               {shown.map((img, i) => (
                 <div
@@ -250,7 +200,7 @@ const GalleryPage = () => {
       {/* ── Lightbox ── */}
       {lightbox.open && (
         <div
-          className="lightbox-overlay"
+          className="gallery-lightbox-overlay"
           onClick={closeLightbox}
           role="dialog"
           aria-modal="true"

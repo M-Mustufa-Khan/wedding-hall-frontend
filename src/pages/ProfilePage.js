@@ -56,6 +56,8 @@ const StatusBanner = ({ status }) => {
    MAIN COMPONENT
 ══════════════════════════════════════════════ */
 const ProfilePage = () => {
+  useEffect(() => { document.title = "My Profile — Elegant Celebrations"; }, []);
+
   const navigate = useNavigate();
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user") || "null")

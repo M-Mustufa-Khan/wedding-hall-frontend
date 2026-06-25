@@ -14,30 +14,46 @@ const EMPTY_FORM = {
   packages: [],
 };
 
+// ── Canvas-based image compression ──
+const compressImage = (file, maxWidth = 1200, quality = 0.80) =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxWidth / img.width);
+        const canvas = document.createElement("canvas");
+        canvas.width  = Math.round(img.width  * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
 // ── Module-level file handlers (stable references, no re-creation on parent render) ──
 
-const handleImageFile = (e, setForm, currentForm) => {
+const handleImageFile = async (e, setForm, currentForm) => {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 5 * 1024 * 1024) { alert("Image too large. Maximum size is 5 MB."); return; }
-  const reader = new FileReader();
-  reader.onloadend = () => setForm({ ...currentForm, imageURL: reader.result });
-  reader.readAsDataURL(file);
+  const compressed = await compressImage(file);
+  setForm({ ...currentForm, imageURL: compressed });
   e.target.value = "";
 };
 
-const handleGalleryFile = (e, form, setForm) => {
+const handleGalleryFile = async (e, form, setForm) => {
   const files = Array.from(e.target.files);
   if (!files.length) return;
   const remaining = 5 - form.galleryImages.length;
   const toProcess = files.slice(0, remaining);
-  toProcess.forEach((file) => {
-    if (file.size > 5 * 1024 * 1024) { alert(`${file.name} is too large (max 5 MB).`); return; }
-    const reader = new FileReader();
-    reader.onloadend = () =>
-      setForm((prev) => ({ ...prev, galleryImages: [...prev.galleryImages, reader.result] }));
-    reader.readAsDataURL(file);
-  });
+  for (const file of toProcess) {
+    if (file.size > 5 * 1024 * 1024) { alert(`${file.name} is too large (max 5 MB).`); continue; }
+    const compressed = await compressImage(file);
+    setForm((prev) => ({ ...prev, galleryImages: [...prev.galleryImages, compressed] }));
+  }
   e.target.value = "";
 };
 
@@ -232,6 +248,8 @@ const PackagesField = ({ form, setForm }) => {
 // ── Main component ────────────────────────────────────────────────────────────
 
 const AdminHalls = () => {
+  useEffect(() => { document.title = "Manage Halls — Admin | Elegant Celebrations"; }, []);
+
   const [halls, setHalls] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
   const [loadError, setLoadError] = useState(false);

@@ -1,21 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#d4af37"/>
-      <stop offset="50%"  stop-color="#f4d03f"/>
-      <stop offset="100%" stop-color="#b8960c"/>
+    <linearGradient id="band" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#f4e080"/>
+      <stop offset="45%"  stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#9a7510"/>
     </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="1.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <linearGradient id="gem-top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="60%"  stop-color="#f4d878"/>
+      <stop offset="100%" stop-color="#d4af37"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
-  <!-- Ring band outer -->
-  <circle cx="32" cy="32" r="28" fill="none" stroke="url(#g)" stroke-width="7" filter="url(#glow)"/>
-  <!-- Ring band inner highlight -->
-  <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2" stroke-dasharray="4 6" stroke-linecap="round"/>
-  <!-- Diamond gem on top -->
-  <polygon points="32,7 38,15 32,19 26,15" fill="url(#g)" filter="url(#glow)"/>
-  <polygon points="32,7 38,15 32,11" fill="rgba(255,255,255,0.45)"/>
-  <polygon points="32,19 38,15 32,11 26,15" fill="rgba(180,140,20,0.6)"/>
+
+  <!-- Dark background -->
+  <rect width="64" height="64" rx="13" fill="#0a0a0a"/>
+
+  <!-- Ring band -->
+  <circle cx="32" cy="43" r="14" fill="none" stroke="url(#band)" stroke-width="7" filter="url(#glow)"/>
+  <!-- Subtle inner highlight on band -->
+  <circle cx="32" cy="43" r="14" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+
+  <!-- Setting — covers top of ring, bridges band to gem -->
+  <rect x="27" y="27" width="10" height="9" fill="#0a0a0a"/>
+  <!-- Setting prongs (two small gold rects) -->
+  <rect x="27" y="27" width="3.5" height="8" rx="1.5" fill="url(#band)"/>
+  <rect x="33.5" y="27" width="3.5" height="8" rx="1.5" fill="url(#band)"/>
+
+  <!-- Diamond gem (kite shape) -->
+  <!-- Main fill -->
+  <path d="M32,9 L41,21 L32,28 L23,21 Z" fill="url(#gem-top)" filter="url(#glow)"/>
+  <!-- Top-right bright facet -->
+  <path d="M32,9 L41,21 L32,17 Z" fill="rgba(255,255,255,0.75)"/>
+  <!-- Top-left mid facet -->
+  <path d="M32,9 L23,21 L32,17 Z" fill="rgba(255,255,255,0.40)"/>
+  <!-- Bottom-right dark facet -->
+  <path d="M32,28 L41,21 L32,17 Z" fill="rgba(130,95,5,0.55)"/>
+  <!-- Bottom-left dark facet -->
+  <path d="M32,28 L23,21 L32,17 Z" fill="rgba(130,95,5,0.35)"/>
+  <!-- Horizontal girdle line -->
+  <line x1="23" y1="21" x2="41" y2="21" stroke="rgba(255,255,255,0.20)" stroke-width="0.6"/>
 </svg>

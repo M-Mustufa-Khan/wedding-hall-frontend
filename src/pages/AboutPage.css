@@ -71,7 +71,7 @@
 }
 
 /* ── Shared section sub ── */
-.section-sub {
+.about-section-sub {
   text-align: center;
   color: rgba(170, 165, 155, 0.70);
   font-size: 1rem;
@@ -93,7 +93,7 @@
 /* ══════════════════════════════════════════════════════
    1. HERO
 ══════════════════════════════════════════════════════ */
-.page-hero {
+.about-page-hero {
   position: relative;
   height: 380px;
   display: flex;
@@ -102,7 +102,7 @@
   overflow: hidden;
 }
 
-.hero-bg {
+.about-hero-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -110,7 +110,7 @@
   animation: heroZoom 14s ease-in-out infinite alternate;
 }
 
-.hero-overlay {
+.about-hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
@@ -121,7 +121,7 @@
   );
 }
 
-.hero-inner {
+.about-hero-inner {
   position: relative;
   z-index: 3;
   text-align: center;
@@ -132,7 +132,7 @@
   animation: fadeUp 0.7s ease both;
 }
 
-.hero-tag {
+.about-hero-tag {
   display: inline-block;
   padding: 5px 16px;
   border-radius: 50px;
@@ -145,7 +145,7 @@
   text-transform: uppercase;
 }
 
-.hero-h1 {
+.about-hero-h1 {
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 800;
   color: #fff;
@@ -154,7 +154,7 @@
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.50);
 }
 
-.hero-sub {
+.about-hero-sub {
   font-size: 1rem;
   color: rgba(240, 236, 228, 0.65);
   margin: 0;
@@ -162,7 +162,7 @@
   line-height: 1.6;
 }
 
-.hero-breadcrumb {
+.about-hero-breadcrumb {
   font-size: 0.8rem;
   color: rgba(200, 195, 185, 0.55);
   display: flex;
@@ -171,13 +171,13 @@
   margin-top: 4px;
 }
 
-.hero-breadcrumb a {
+.about-hero-breadcrumb a {
   color: rgba(200, 195, 185, 0.55);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.hero-breadcrumb a:hover {
+.about-hero-breadcrumb a:hover {
   color: #d4af37;
 }
 
@@ -726,11 +726,11 @@
    RESPONSIVE — 600px
 ══════════════════════════════════════════════════════ */
 @media (max-width: 600px) {
-  .page-hero {
+  .about-page-hero {
     height: 340px;
   }
 
-  .hero-sub {
+  .about-hero-sub {
     font-size: 0.9rem;
     padding: 0 16px;
   }
@@ -811,7 +811,7 @@
     font-size: 1.7rem;
   }
 
-  .hero-h1 {
+  .about-hero-h1 {
     font-size: 1.9rem;
   }
 }

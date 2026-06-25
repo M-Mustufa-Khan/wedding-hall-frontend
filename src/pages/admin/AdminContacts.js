@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Mail, Trash2, Eye, EyeOff, RefreshCw, X,
   Phone, Tag, Clock, User,
@@ -12,12 +12,17 @@ const formatDate = (d) =>
     hour: "2-digit", minute: "2-digit",
   });
 
+const AC_PAGE_SIZE = 10;
+
 const AdminContacts = () => {
+  useEffect(() => { document.title = "Messages — Admin | Elegant Celebrations"; }, []);
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(false);
   const [selected, setSelected] = useState(null);
   const [filter, setFilter]     = useState("all"); // all | unread | read
+  const [page, setPage]         = useState(1);
 
   useEffect(() => { load(); }, []);
 
@@ -73,13 +78,17 @@ const AdminContacts = () => {
     }
   };
 
-  const filtered = messages.filter((m) => {
+  const filtered = useMemo(() => messages.filter((m) => {
     if (filter === "unread") return !m.isRead;
     if (filter === "read")   return m.isRead;
     return true;
-  });
+  }), [messages, filter]);
 
   const unreadCount = messages.filter((m) => !m.isRead).length;
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / AC_PAGE_SIZE));
+  const safePage   = Math.min(page, totalPages);
+  const pagedMessages = filtered.slice((safePage - 1) * AC_PAGE_SIZE, safePage * AC_PAGE_SIZE);
 
   return (
     <div className="ac-page">
@@ -118,7 +127,7 @@ const AdminContacts = () => {
           <button
             key={t.key}
             className={`ac-tab${filter === t.key ? " active" : ""}`}
-            onClick={() => setFilter(t.key)}
+            onClick={() => { setFilter(t.key); setPage(1); }}
           >
             {t.label}
             <span className="ac-tab-count">{t.count}</span>
@@ -159,7 +168,7 @@ const AdminContacts = () => {
             </p>
           </div>
         ) : (
-          filtered.map((msg) => (
+          pagedMessages.map((msg) => (
             <div
               key={msg.contactID}
               className={`contact-item${!msg.isRead ? " unread" : ""}${selected?.contactID === msg.contactID ? " selected" : ""}`}
@@ -197,6 +206,37 @@ const AdminContacts = () => {
           ))
         )}
       </div>
+
+      {/* ── Pagination ── */}
+      {!loading && totalPages > 1 && (
+        <div className="ac-pagination">
+          <button
+            className="ac-page-btn"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={safePage === 1}
+          >
+            ‹ Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              className={`ac-page-btn${safePage === p ? " ac-page-btn--active" : ""}`}
+              onClick={() => setPage(p)}
+            >
+              {p}
+            </button>
+          ))}
+
+          <button
+            className="ac-page-btn"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={safePage === totalPages}
+          >
+            Next ›
+          </button>
+        </div>
+      )}
 
       {/* ── Detail Modal ── */}
       {selected && (

@@ -17,6 +17,8 @@ const formatAmt = (n) =>
   n == null ? "—" : `Rs ${Number(n).toLocaleString("en-PK")}`;
 
 const MyBookingsPage = () => {
+  useEffect(() => { document.title = "My Bookings — Elegant Celebrations"; }, []);
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

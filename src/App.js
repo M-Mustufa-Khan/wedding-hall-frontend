@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminBookings from "./pages/admin/AdminBookings";
 import AdminHalls from "./pages/admin/AdminHalls";
 import AdminContacts from "./pages/admin/AdminContacts";
+import AdminGallery from "./pages/admin/AdminGallery";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -22,7 +23,22 @@ import "./App.css";
 import ContactPage from "./pages/ContactPage";
 import ProfilePage from "./pages/ProfilePage";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
 function App() {
+  useEffect(() => {
+    // Prevent browser from restoring scroll position (causes auto-scroll-down on load)
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
   useEffect(() => {
     const setupRevealObserver = () => {
       const revealElements = document.querySelectorAll(
@@ -64,6 +80,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="app">
         <Navbar />
         <main className="main-content">
@@ -98,6 +115,14 @@ function App() {
               element={
                 <AdminLayout>
                   <AdminContacts />
+                </AdminLayout>
+              }
+            />
+            <Route
+              path="/admin/gallery"
+              element={
+                <AdminLayout>
+                  <AdminGallery />
                 </AdminLayout>
               }
             />

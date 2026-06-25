@@ -27,6 +27,8 @@ const STEPS = [
 ];
 
 const BookingPage = () => {
+  useEffect(() => { document.title = "Book Your Event — Elegant Celebrations"; }, []);
+
   const location = useLocation();
   const navigate = useNavigate();
   const { hall, package: selectedPkg } = location.state || {};

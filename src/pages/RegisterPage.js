@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Phone, User, Eye, EyeOff } from "lucide-react";
 import { register } from "../services/api";
@@ -22,6 +22,8 @@ const STRENGTH_META = {
 };
 
 const RegisterPage = () => {
+  useEffect(() => { document.title = "Create Account — Elegant Celebrations"; }, []);
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({

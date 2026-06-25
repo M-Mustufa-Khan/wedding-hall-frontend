@@ -67,6 +67,8 @@ const SkeletonRow = () => (
 const VISIBLE_COUNT = 5;
 
 const AdminDashboard = () => {
+  useEffect(() => { document.title = "Dashboard — Admin | Elegant Celebrations"; }, []);
+
   const [bookings, setBookings] = useState([]);
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -299,7 +301,7 @@ const AdminDashboard = () => {
       {/* ── Bookings section card ── */}
       <div className="section-card">
         <div className="section-header">
-          <h3 className="section-title">
+          <h3 className="adash-section-title">
             {activeFilter === "All"
               ? "Recent Bookings"
               : `${activeFilter} Bookings`}

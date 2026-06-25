@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Shield,
@@ -96,30 +96,32 @@ const VALUES = [
 
 /* ── Component ── */
 const AboutPage = () => {
+  useEffect(() => { document.title = "About Us — Elegant Celebrations"; }, []);
+
   return (
     <div className="about-page">
 
       {/* ══════════════════════════════════════
           1. HERO
       ══════════════════════════════════════ */}
-      <section className="page-hero about-hero-section">
+      <section className="about-page-hero about-hero-section">
         <div
-          className="hero-bg"
+          className="about-hero-bg"
           aria-hidden="true"
           style={{
             backgroundImage:
               "url(https://images.unsplash.com/photo-1478146059778-26028b07395a?w=1600)",
           }}
         />
-        <div className="hero-overlay" aria-hidden="true" />
-        <div className="hero-inner">
-          <span className="hero-tag">✦ About Us</span>
-          <h1 className="hero-h1">Our Story</h1>
-          <p className="hero-sub">
+        <div className="about-hero-overlay" aria-hidden="true" />
+        <div className="about-hero-inner">
+          <span className="about-hero-tag">✦ About Us</span>
+          <h1 className="about-hero-h1">Our Story</h1>
+          <p className="about-hero-sub">
             Creating timeless celebrations since 2010 — from intimate gatherings
             to grand weddings across Pakistan.
           </p>
-          <nav className="hero-breadcrumb" aria-label="Breadcrumb">
+          <nav className="about-hero-breadcrumb" aria-label="Breadcrumb">
             <Link to="/">Home</Link>
             <ChevronRight size={13} />
             <span>About</span>
@@ -207,7 +209,7 @@ const AboutPage = () => {
         <div className="about-container">
           <span className="section-eyebrow">✦ What We Stand For</span>
           <h2 className="section-heading">Our Values</h2>
-          <p className="section-sub">
+          <p className="about-section-sub">
             The principles that guide every event, every booking, and every
             interaction with our team.
           </p>
@@ -235,7 +237,7 @@ const AboutPage = () => {
         <div className="about-container">
           <span className="section-eyebrow">✦ The People</span>
           <h2 className="section-heading">Meet Our Team</h2>
-          <p className="section-sub">
+          <p className="about-section-sub">
             Dedicated professionals who make every celebration unforgettable.
           </p>
           <div className="team-grid">

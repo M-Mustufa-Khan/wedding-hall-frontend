@@ -32,6 +32,10 @@ const HallDetailPage = () => {
   const navigate = useNavigate();
   const [hall, setHall] = useState(null);
   const [selectedPkg, setSelectedPkg] = useState(null);
+
+  useEffect(() => {
+    document.title = hall ? `${hall.name} — Elegant Celebrations` : "Elegant Celebrations";
+  }, [hall]);
   const [lightbox, setLightbox] = useState({ open: false, index: 0 });
 
   // ── Wishlist state — reads from localStorage on mount ──
@@ -528,7 +532,7 @@ const HallDetailPage = () => {
          ══════════════════════════════════════ */}
       {lightbox.open && (
         <div
-          className="lightbox-overlay"
+          className="hd-lightbox-overlay"
           onClick={() => setLightbox((lb) => ({ ...lb, open: false }))}
         >
           <div className="lightbox-modal" onClick={(e) => e.stopPropagation()}>

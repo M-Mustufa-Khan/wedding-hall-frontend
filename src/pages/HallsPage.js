@@ -31,6 +31,8 @@ const FALLBACK_HALLS = [
 ];
 
 const HallsPage = () => {
+  useEffect(() => { document.title = "Browse Halls — Elegant Celebrations"; }, []);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [allHalls,    setAllHalls]    = useState([]);
   const [loading,     setLoading]     = useState(true);

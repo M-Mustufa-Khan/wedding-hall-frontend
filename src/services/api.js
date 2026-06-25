@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// Your ASP.NET Backend URL (from Swagger)
-const API_BASE = "https://localhost:7134/api";
+// In production, set REACT_APP_API_URL in .env.production to your deployed backend URL
+const API_BASE = process.env.REACT_APP_API_URL || "https://localhost:7134/api";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -64,6 +64,11 @@ export const cancelBooking = (id) => updateBookingStatus(id, "Cancelled");
 // NOTE: endpoint uses lowercase "login"
 export const login = (data) => api.post("/Auth/login", data);
 export const register = (data) => api.post("/Auth/register", data);
+
+// ========== GALLERY ==========
+export const getGalleryImages = () => api.get("/Gallery");
+export const uploadGalleryImage = (data) => api.post("/Gallery", data);
+export const deleteGalleryImage = (id) => api.delete(`/Gallery/${id}`);
 
 // ========== CONTACTS ==========
 export const sendContact      = (data) => api.post("/Contacts", data);

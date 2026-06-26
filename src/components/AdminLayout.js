@@ -162,6 +162,28 @@ const AdminLayout = ({ children }) => {
         {/* Content */}
         <div className="admin-content">{children}</div>
       </main>
+
+      {/* ── MOBILE BOTTOM NAV ── */}
+      <nav className="admin-bottom-nav">
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`bottom-nav-item${isActive ? " active" : ""}`}
+            >
+              <span className="bottom-nav-icon">
+                {item.icon}
+                {item.badge > 0 && (
+                  <span className="bottom-nav-badge">{item.badge > 9 ? "9+" : item.badge}</span>
+                )}
+              </span>
+              <span className="bottom-nav-label">{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 };

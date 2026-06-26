@@ -520,6 +520,13 @@
 }
 
 /* ═══════════════════════════════════════════════════════
+   MOBILE BOTTOM NAV
+   ═══════════════════════════════════════════════════════ */
+.admin-bottom-nav {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════
    RESPONSIVE — ≤768px
    ═══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
@@ -552,11 +559,94 @@
   }
 
   .admin-content {
-    padding: 20px 16px 48px;
+    padding: 20px 16px 80px;
   }
 
   .topbar-name {
     display: none;
+  }
+
+  /* ── Bottom Nav ── */
+  .admin-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(6, 6, 6, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 2px;
+  }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 6px 4px;
+    text-decoration: none;
+    color: rgba(170, 165, 155, 0.60);
+    border-radius: 10px;
+    transition: color 0.18s, background 0.18s;
+    min-width: 0;
+    position: relative;
+  }
+
+  .bottom-nav-item:hover {
+    color: rgba(200, 195, 185, 0.85);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .bottom-nav-item.active {
+    color: #f4d03f;
+    background: rgba(212, 175, 55, 0.10);
+  }
+
+  .bottom-nav-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .bottom-nav-badge {
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    background: #d4af37;
+    color: #060606;
+    font-size: 0.5rem;
+    font-weight: 800;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .bottom-nav-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-align: center;
   }
 }
 

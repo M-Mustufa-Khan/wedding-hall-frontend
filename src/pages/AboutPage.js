@@ -15,13 +15,6 @@ import {
 import "./AboutPage.css";
 
 /* ── Data arrays (preserved from original) ── */
-const TIMELINE = [
-  { year: "2010", text: "Founded with our first hall in Karachi" },
-  { year: "2014", text: "Expanded to 10 locations across Pakistan" },
-  { year: "2018", text: "Launched our online booking platform" },
-  { year: "2022", text: "Served over 5,000 weddings nationwide" },
-  { year: "2025", text: "Now operating 50+ premium halls in 20+ cities" },
-];
 
 const STATS = [
   { num: "500+", label: "Weddings Hosted" },

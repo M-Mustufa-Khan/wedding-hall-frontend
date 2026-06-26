@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
-  Menu, X, Calendar, User, Home, Building2, Package,
+  X, Calendar, User, Home, Building2, Package,
   Images, Info, Mail, Shield, LogOut, ChevronDown,
 } from "lucide-react";
 import "./Navbar.css";
